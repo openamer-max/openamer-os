@@ -124,7 +124,13 @@ def pack(args) -> int:
 
     Gemessen: das ganze Repo sind 270 MB Archiv (mit node_modules/Logs); die
     Python-Pakete allein sind 12 MB. Nur die braucht das Image.
+
+    Reproduzierbar: Gzip-Zeitstempel 0 und sortierte Eintraege. Ohne das
+    erzeugt jeder Lauf einen anderen Tarball (gleiche Groesse, anderer Hash)
+    und `verify.py` — das `omx os pack` aufruft — macht das Repo bei jedem
+    Prueflauf schmutzig.
     """
+    import gzip
     import tarfile
     from .paths import agent_repo
 
@@ -137,20 +143,31 @@ def pack(args) -> int:
                          "providers", "plugins", "tui_gateway") if (src / p).is_dir()]
     target = os_dir() / "om-src.tgz"
     count = 0
-    with tarfile.open(target, "w:gz") as tf:
-        for part in parts:
-            tf.add(src / part, arcname=part,
-                   filter=lambda ti: None if "__pycache__" in ti.name else ti)
-        for f in src.glob("*.py"):
-            tf.add(f, arcname=f.name)
-            count += 1
-        for f in ("pyproject.toml", "setup.py"):
-            if (src / f).is_file():
-                tf.add(src / f, arcname=f)
+    with gzip.GzipFile(filename="", mode="wb", fileobj=open(target, "wb"),
+                       mtime=0, compresslevel=9) as gz:
+        with tarfile.open(fileobj=gz, mode="w") as tf:
+            for part in parts:
+                tf.add(src / part, arcname=part,
+                       filter=lambda ti: None if "__pycache__" in ti.name else _stable(ti))
+            for f in sorted(src.glob("*.py")):
+                tf.add(f, arcname=f.name, filter=_stable)
+                count += 1
+            for f in ("pyproject.toml", "setup.py"):
+                if (src / f).is_file():
+                    tf.add(src / f, arcname=f, filter=_stable)
 
     mb = target.stat().st_size / 1e6
     print(f"  [ok]  {target}  {mb:.1f} MB  ({len(parts)} Pakete, {count} Module)")
     return 0
+
+
+def _stable(ti):
+    """Tar-Info auf Inhalt reduzieren: keine uid/gid/mtime-Unterschiede."""
+    ti.uid = ti.gid = 0
+    ti.uname = ti.gname = ""
+    ti.mtime = 0
+    ti.mode = 0o755 if ti.isdir() else 0o644
+    return ti
 
 
 def build(args) -> int:
