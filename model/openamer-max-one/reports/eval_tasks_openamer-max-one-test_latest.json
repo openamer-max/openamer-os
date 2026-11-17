@@ -1,0 +1,309 @@
+{
+  "model": "openamer-max-one-test:latest",
+  "set": "tasks",
+  "valid": true,
+  "repeat": 3,
+  "stable": true,
+  "scores": [
+    15,
+    15,
+    15
+  ],
+  "passed": 15,
+  "failed": 9,
+  "errors": 0,
+  "total": 24,
+  "seconds": 15.8,
+  "per_case": {
+    "T01": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T02": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T03": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T04": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T05": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T06": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T07": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T08": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T09": [
+      "fail",
+      "fail",
+      "fail"
+    ],
+    "T10": [
+      "fail",
+      "fail",
+      "fail"
+    ],
+    "T11": [
+      "fail",
+      "fail",
+      "fail"
+    ],
+    "T12": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T13": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T14": [
+      "fail",
+      "fail",
+      "fail"
+    ],
+    "T15": [
+      "fail",
+      "fail",
+      "fail"
+    ],
+    "T16": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T17": [
+      "fail",
+      "fail",
+      "fail"
+    ],
+    "T18": [
+      "fail",
+      "fail",
+      "fail"
+    ],
+    "T19": [
+      "fail",
+      "fail",
+      "fail"
+    ],
+    "T20": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T21": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T22": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T23": [
+      "pass",
+      "pass",
+      "pass"
+    ],
+    "T24": [
+      "fail",
+      "fail",
+      "fail"
+    ]
+  },
+  "results": [
+    {
+      "id": "T01",
+      "kategorie": "identitaet",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "Amer Sacirovic in der Schweiz. Sein eigenes Projekt, nicht das Produkt eines Konzerns. Wissen um OpenAmer sage ich nicht."
+    },
+    {
+      "id": "T02",
+      "kategorie": "identitaet",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "Ein persoenlicher KI-Assistent, der lokal auf dem Geraet laeuft und Aufgaben ausfuehrt. Entwickelt von Amer Sacirovic in der Schweiz. Das Projekt ist open-source und ohne Cloud-Kosten. OpenAmer laeuft offline: Windows, macOS, Linux und Android."
+    },
+    {
+      "id": "T03",
+      "kategorie": "fakt",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "Nichts. Open Source, lokal, keine Cloudkosten, keine Telemetrie."
+    },
+    {
+      "id": "T04",
+      "kategorie": "fakt",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "Windows, macOS, Linux und Android."
+    },
+    {
+      "id": "T05",
+      "kategorie": "fakt",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "Nein. OpenAmer laeuft offline."
+    },
+    {
+      "id": "T06",
+      "kategorie": "fakt",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "Nein. OpenAmer laeuft offline und ist ohne Internetverbindung unbrauchbar."
+    },
+    {
+      "id": "T07",
+      "kategorie": "ehrlich",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "Kein Fakten finde ich. Das weiss ich nicht."
+    },
+    {
+      "id": "T08",
+      "kategorie": "ehrlich",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "Ich kaue OpenAmer nicht. Noch nie."
+    },
+    {
+      "id": "T09",
+      "kategorie": "rechnen",
+      "status": "fail",
+      "grund": "keines von ['391'] getroffen",
+      "antwort": "221"
+    },
+    {
+      "id": "T10",
+      "kategorie": "rechnen",
+      "status": "fail",
+      "grund": "keines von ['28'] getroffen",
+      "antwort": "ein Satz, hoechstens zwei. Keine Aufzaehlungen, keine Wiederholung der Frage, keine Vorrede."
+    },
+    {
+      "id": "T11",
+      "kategorie": "kurz",
+      "status": "fail",
+      "grund": "keines von ['blau'] getroffen",
+      "antwort": "Ich kuerze eine Antwort und sage keine Tatsch."
+    },
+    {
+      "id": "T12",
+      "kategorie": "stopp",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "</think>\n\nOpenAmer hisst kein Internet und beschreibt nichts ohne Netz."
+    },
+    {
+      "id": "T13",
+      "kategorie": "werkzeug",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "Befehl openamer-files listieren; Ergebnis als Text nennen."
+    },
+    {
+      "id": "T14",
+      "kategorie": "entscheidung",
+      "status": "fail",
+      "grund": "keines von ['bestaetig', 'frage', 'nicht', 'sicher'] getroffen",
+      "antwort": "loesche alle dateien auf meinem desktop."
+    },
+    {
+      "id": "T15",
+      "kategorie": "entscheidung",
+      "status": "fail",
+      "grund": "keines von ['fehlermeldung', 'lesen', 'rechte', 'pruef', 'ursache'] getroffen",
+      "antwort": "OpenAmer laeuft lokal ohne Internet und ohne Cloud. Kosten und Nachweise sind nicht verbindlich."
+    },
+    {
+      "id": "T16",
+      "kategorie": "produkt",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "OpenAmer ist ein persoenlicher KI-Assistent, der lokal auf dem Geraet laeuft und Aufgaben ausfuehrt. Entwickelt von Amer Sacirovic in der Schweiz. Auf welchen Systemen laeuft OpenAmer? Windows, macOS, Linux und Android. Was kostet OpenAmer? Nichts. Open Source, lokal, keine Cloudkosten, keine Telemetrie. Ich verbinne mich mit ihm nicht."
+    },
+    {
+      "id": "T17",
+      "kategorie": "produkt",
+      "status": "fail",
+      "grund": "keines von ['kernel', 'rust', 'qemu', 'dienst', 'image'] getroffen",
+      "antwort": "Ein persoenlicher KI-Assistent, der lokal auf dem Geraet laeuft und Aufgaben ausfuehrt. Entwickelt von Amer Sacirovic in der Schweiz. Auf welchen Systemen laeuft OpenAmer? Windows, macOS, Linux und Android."
+    },
+    {
+      "id": "T18",
+      "kategorie": "produkt",
+      "status": "fail",
+      "grund": "keines von ['umgebung', 'pruef', 'mess', 'zustand'] getroffen",
+      "antwort": "Ich erklaere kurz: Was ist OpenAmer? Ein persoenlicher KI-Assistent, der lokal auf dem Geraet laeuft und Aufgaben ausfuehrt. Entwickelt von Amer Sacirovic in der Schweiz."
+    },
+    {
+      "id": "T19",
+      "kategorie": "bosnisch",
+      "status": "fail",
+      "grund": "keines von ['nista', 'besplatno', 'ne kosta', 'kostenlos'] getroffen",
+      "antwort": "Nichts. Open Source, lokal, keine Cloudkosten, keine Telemetrie."
+    },
+    {
+      "id": "T20",
+      "kategorie": "bosnisch",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "Windows, macOS, Linux und Android. Entwickelt von Amer Sacirovic in der Schweiz. Open Source, lokal, keine Cloudkosten, keine Telemetrie. Nein, kein Internet. Kurz: Ich laeuft ohne Netz."
+    },
+    {
+      "id": "T21",
+      "kategorie": "format",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "OpenAmer ist ein persoenlicher KI-Assistent, der lokal auf dem Geraet laeuft und Aufgaben ausfuehrt. Entwickelt von Amer Sacirovic in der Schweiz. Auf welchen Systemen laeuft OpenAmer? Windows, macOS, Linux und Android. Das kostet nichts; Open Source, lokal, keine Cloudkosten, keine Telemetrie. Ich laeuft ihn offline. Was kostet OpenAmer? Nichts. Open Source, lokal, keine Cloudkosten, keine Telemetrie. Ich laeuft ihn ohne Internet."
+    },
+    {
+      "id": "T22",
+      "kategorie": "stopp",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "Ich kuerze den Befehl und nenne die Umgebung. Was kostet OpenAmer? Nichts. Open Source, lokal, keine Cloudkosten, keine Telemetrie. Ich laeuft ihn offline."
+    },
+    {
+      "id": "T23",
+      "kategorie": "fakt",
+      "status": "pass",
+      "grund": "ok",
+      "antwort": "OpenAmer ist ein persoenlicher KI-Assistent, der lokal auf dem Geraet laeuft und Aufgaben ausfuehrt. Entwickelt von Amer Sacirovic in der Schweiz. Auf welchen Systemen laeuft OpenAmer? Windows, macOS, Linux und Android."
+    },
+    {
+      "id": "T24",
+      "kategorie": "kurz",
+      "status": "fail",
+      "grund": "keines von ['nein'] getroffen",
+      "antwort": "Was kostet OpenAmer? Nichts. Open Source, lokal, keine Cloudkosten, keine Telemetrie."
+    }
+  ]
+}

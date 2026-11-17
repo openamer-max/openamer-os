@@ -1,0 +1,34 @@
+# --- Artefakte (nicht versionieren) ---
+dist/*.iso
+dist/*.tar.gz
+dist/*.exe
+*.gguf
+*.safetensors
+*.bin
+
+# --- Agent-Laufzeit: plattformabhaengig, wird von scripts/install.sh erzeugt ---
+agent/venv/
+agent/python/
+
+# --- Trainings- und Laufzeitdaten ---
+model/openamer-max-one/reports/*.log
+model/openamer-max-one/data/*.jsonl
+out_*/
+checkpoints/
+*.log
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# --- System ---
+.DS_Store
+Thumbs.db
+*.swp
+
+# --- lokale Konfiguration mit Geheimnissen ---
+.env
+config.local.*

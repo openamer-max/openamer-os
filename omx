@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# omx — Kommandozentrale OpenAmer Agent-Max
+#
+# Plattformneutral: laeuft unter Linux/WSL und unter Windows (Git-bash).
+#
+# Zwei gemessene Fallen:
+#  1. Windows: `pwd` liefert /c/Users/... — der Windows-Python liest das als
+#     C:\c\Users\... -> "No such file or directory". Deshalb cygpath -w.
+#  2. Linux: heisst der Interpreter `python3`, nicht `python`.
+set -euo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Interpreter bestimmen.
+# Windows-Falle: `python` ist oft nur ein Store-Alias, der ins Leere zeigt
+# ("Python wurde nicht gefunden"). Deshalb der Reihe nach probieren und den
+# Treffer verifizieren, statt dem Namen zu vertrauen.
+PY=""
+for c in python3 python py; do
+  if command -v "$c" >/dev/null 2>&1 && "$c" -c "import sys" >/dev/null 2>&1; then
+    PY="$c"; break
+  fi
+done
+if [ -z "$PY" ]; then
+  echo "omx: kein lauffaehiger Python-Interpreter gefunden (python3/python/py)" >&2
+  exit 127
+fi
+
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*)
+    # Windows: nativen Pfad bauen, Backslash fuer den Windows-Python
+    if command -v cygpath >/dev/null 2>&1; then
+      DIR="$(cygpath -w "$DIR")"
+    fi
+    exec "$PY" "${DIR}\\omx.py" "$@"
+    ;;
+  *)
+    exec "$PY" "$DIR/omx.py" "$@"
+    ;;
+esac

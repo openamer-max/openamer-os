@@ -1,0 +1,39 @@
+NOTICE — OpenAmer Agent-Max
+===========================
+
+Dieser Ordner bündelt mehrere Schichten. Die Lizenzrechte sind getrennt zu
+betrachten:
+
+1. OpenAmer Agent (Upstream)
+   Quelle:  https://github.com/openamer/openamer
+   Lizenz:  Apache License 2.0 (siehe LICENSE) sowie der Dual-License-Hinweis
+            in LICENSE.md. Alle dortigen Rechte und Pflichten gelten weiter.
+   Umfang:  Der Agent-Kern (Laufzeit, Werkzeuge, CLI) wird unverändert
+            verwendet, nicht neu lizenziert.
+
+2. Eigene Ergänzungen dieses Projekts
+   - omx_cli/, omx.py, omx, omx.cmd      (Kommandozentrale)
+   - verify.py                            (kanonische Prüfung)
+   - model/openamer-max-one/              (Fakten, Prüfsätze, Datengenerator,
+                                           Manifest-Reparatur)
+   - os/openamer-os/                      (Docker-Images, Entrypoint)
+   - scripts/                             (Bau- und Betriebsskripte)
+   - START.md, README.md, ARCHITEKTUR.md, CHANGELOG.md
+   Diese Teile stehen unter derselben Lizenz wie der Upstream (Apache 2.0),
+   damit das Gesamtpaket einheitlich bleibt.
+
+3. Modellgewichte
+   Die Basismodelle (Qwen2.5, Qwen3) unterliegen den Lizenzen ihrer
+   Urheber. Die daraus abgeleiteten OpenAmer-Max-Stufen erben diese Bedingungen.
+   Es werden in diesem Ordner keine Gewichte mitgeliefert — sie liegen im
+   lokalen Ollama-Speicher.
+
+4. Firmware im Live-ISO
+   Das ISO enthält Debian-Pakete einschließlich non-free-firmware
+   (z. B. firmware-iwlwifi, firmware-misc-nonfree, intel-microcode).
+   Für die Weitergabe des ISO gelten deren jeweilige Lizenzbedingungen.
+
+Kein Teil dieses Projekts wurde erfunden oder geschätzt, was Messwerte angeht:
+Alle Zahlen in README.md und CHANGELOG.md stammen aus echten Läufen, deren
+Ausgaben reproduzierbar über verify.py und die Skripte in scripts/ erzeugt
+werden können.

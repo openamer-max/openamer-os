@@ -1,0 +1,135 @@
+{
+  "modell": "qwen2.5vl:7b",
+  "repeat": 2,
+  "ergebnis": "8/10",
+  "faelle": [
+    {
+      "id": "V01",
+      "kategorie": "log_lesen",
+      "bestanden": true,
+      "antworten": [
+        "3.11.17",
+        "3.11.17"
+      ],
+      "muss": [
+        "3.11.17",
+        "3.11"
+      ]
+    },
+    {
+      "id": "V02",
+      "kategorie": "log_lesen",
+      "bestanden": true,
+      "antworten": [
+        "Im Bildschirmausschnitt wird die Git-Version 2.54.0.windows.1 gefunden.",
+        "Im Bildschirmausschnitt wird die Git-Version 2.54.0.windows.1 gefunden."
+      ],
+      "muss": [
+        "2.54"
+      ]
+    },
+    {
+      "id": "V03",
+      "kategorie": "log_lesen",
+      "bestanden": true,
+      "antworten": [
+        "Am Ende der Ausgabe, nach dem git-Hinweis, steht das Wort 'cde9d39'.",
+        "Am Ende der Ausgabe, nach dem git-Hinweis, steht das Wort 'cde9d39'."
+      ],
+      "muss": [
+        "cde9d39"
+      ]
+    },
+    {
+      "id": "V04",
+      "kategorie": "tui_lesen",
+      "bestanden": true,
+      "antworten": [
+        "Das Modell, das in der OpenAmer-Oberfläche läuft, ist \"deepseek-v4.1-flash\".",
+        "Das Modell, das in der OpenAmer-Oberfläche läuft, ist \"deepseek-v4.1-flash\"."
+      ],
+      "muss": [
+        "deepseek"
+      ]
+    },
+    {
+      "id": "V05",
+      "kategorie": "tui_lesen",
+      "bestanden": true,
+      "antworten": [
+        "Die Oberfläche meldet 314 Skills.",
+        "Die Oberfläche meldet 314 Skills."
+      ],
+      "muss": [
+        "314"
+      ]
+    },
+    {
+      "id": "V06",
+      "kategorie": "fehler_finden",
+      "bestanden": true,
+      "antworten": [
+        "Erfolgreich",
+        "Erfolgreich"
+      ],
+      "muss": [
+        "erfolgreich",
+        "ok",
+        "ja",
+        "yes",
+        "success"
+      ]
+    },
+    {
+      "id": "V07",
+      "kategorie": "fehler_finden",
+      "bestanden": false,
+      "antworten": [
+        "FEHLER: TimeoutError: timed out",
+        "Zwei Funktionen der Werkzeugliste, die als fehlend markiert sind, sind:\n\n1. `view`\n2. `create`"
+      ],
+      "muss": [
+        "web search",
+        "browser automation",
+        "skills hub"
+      ]
+    },
+    {
+      "id": "V08",
+      "kategorie": "fehler_finden",
+      "bestanden": false,
+      "antworten": [
+        "Das Bild zeigt eine Konsole mit einer Liste von Messaging-Plattformen, die noch nicht konfiguriert sind. Es gibt keine Anzeige von Fehlern oder Login-Problemen. Es scheint, dass die Konfiguration noch nicht abgeschlossen ist, da keine Plattformen ausgewählt wurden und die Nachricht \"No platforms selected. Run 'openamer setup gateway' later to configure.\" angezeigt wird.\n\nUm den Login zu schlagen oder einen Fehler zu beheben, müssten Sie die Plattformen konfigurieren, die Sie",
+        "Das Bild zeigt eine Konsole mit einer Liste von Messaging-Plattformen, die noch nicht konfiguriert sind. Es gibt keine Anzeige von Fehlern oder Login-Problemen. Der Fehlercode ist nicht sichtbar, da es keine Fehlermeldung gibt. Es scheint, dass die Konfiguration noch nicht abgeschlossen ist, da keine Plattformen ausgewählt wurden. Um fortzufahren, müssen Sie die gewünschten Plattformen auswählen und konfigurieren."
+      ],
+      "muss": [
+        "11001",
+        "getaddrinfo"
+      ]
+    },
+    {
+      "id": "V09",
+      "kategorie": "pfad_lesen",
+      "bestanden": true,
+      "antworten": [
+        "Die Einstellungen liegen im Ordner `C:\\Users\\amer7\\AppData\\Local\\openamer\\config.yaml`.",
+        "Die Einstellungen liegen im Ordner `C:\\Users\\amer7\\AppData\\Local\\openamer\\config.yaml`."
+      ],
+      "muss": [
+        "config.yaml"
+      ]
+    },
+    {
+      "id": "V10",
+      "kategorie": "status",
+      "bestanden": true,
+      "antworten": [
+        "Ja.",
+        "Ja."
+      ],
+      "muss": [
+        "ja"
+      ]
+    }
+  ]
+}

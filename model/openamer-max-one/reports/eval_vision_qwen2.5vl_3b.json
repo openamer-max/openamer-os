@@ -1,0 +1,135 @@
+{
+  "modell": "qwen2.5vl:3b",
+  "repeat": 2,
+  "ergebnis": "7/10",
+  "faelle": [
+    {
+      "id": "V01",
+      "kategorie": "log_lesen",
+      "bestanden": true,
+      "antworten": [
+        "Der Installer meldet die Python-Version 3.11.17.",
+        "Der Installer meldet die Python-Version 3.11.17."
+      ],
+      "muss": [
+        "3.11.17",
+        "3.11"
+      ]
+    },
+    {
+      "id": "V02",
+      "kategorie": "log_lesen",
+      "bestanden": true,
+      "antworten": [
+        "Die Git-Version, die gefunden wurde, ist 2.54.0.windows.1.",
+        "Die Git-Version, die gefunden wurde, ist 2.54.0.windows.1."
+      ],
+      "muss": [
+        "2.54"
+      ]
+    },
+    {
+      "id": "V03",
+      "kategorie": "log_lesen",
+      "bestanden": true,
+      "antworten": [
+        "Das Wort, das am Ende der Ausgabe steht, ist \"cde9d39\".",
+        "Das Wort, das am Ende der Ausgabe steht, ist \"cde9d39\"."
+      ],
+      "muss": [
+        "cde9d39"
+      ]
+    },
+    {
+      "id": "V04",
+      "kategorie": "tui_lesen",
+      "bestanden": true,
+      "antworten": [
+        "Das Modell, das in der OpenAmer-Oberfläche läuft, ist \"deepseek-v4.1-flash\".",
+        "Das Modell, das in der OpenAmer-Oberfläche läuft, ist \"deepseek-v4.1-flash\"."
+      ],
+      "muss": [
+        "deepseek"
+      ]
+    },
+    {
+      "id": "V05",
+      "kategorie": "tui_lesen",
+      "bestanden": true,
+      "antworten": [
+        "Die Oberfläche meldet 314 Skills an.",
+        "Die Oberfläche meldet 314 Skills an."
+      ],
+      "muss": [
+        "314"
+      ]
+    },
+    {
+      "id": "V06",
+      "kategorie": "fehler_finden",
+      "bestanden": false,
+      "antworten": [
+        "Fehlerrichter",
+        "Fehlerrhaft"
+      ],
+      "muss": [
+        "erfolgreich",
+        "ok",
+        "ja",
+        "yes",
+        "success"
+      ]
+    },
+    {
+      "id": "V07",
+      "kategorie": "fehler_finden",
+      "bestanden": false,
+      "antworten": [
+        "Die Werkzeugliste zeigt, dass die Funktionen \"openamer setup tools\" und \"openamer config edit\" als fehlend markiert sind.",
+        "Die Werkzeugliste zeigt, dass die Funktionen \"openamer setup tools\" und \"openamer config edit\" als fehlend markiert sind."
+      ],
+      "muss": [
+        "web search",
+        "browser automation",
+        "skills hub"
+      ]
+    },
+    {
+      "id": "V08",
+      "kategorie": "fehler_finden",
+      "bestanden": false,
+      "antworten": [
+        "Es tut mir leid, aber ich kann keine genauen Informationen über den Fehlercode oder den genauen Fehlercode geben, ohne den genauen Fehlercode zu sehen. Wenn du den Fehlercode sehen kannst, kann ich dir helfen, ihn zu beheben.",
+        "Es tut mir leid, aber ich kann keine genauen Informationen über den Fehlercode oder den genauen Fehlercode geben, ohne den genauen Fehlercode zu sehen. Wenn du den Fehlercode sehen kannst, kann ich dir helfen, ihn zu beheben."
+      ],
+      "muss": [
+        "11001",
+        "getaddrinfo"
+      ]
+    },
+    {
+      "id": "V09",
+      "kategorie": "pfad_lesen",
+      "bestanden": true,
+      "antworten": [
+        "Die Einstellungen liegen im Ordner `C:\\Users\\amer7\\AppData\\Local\\openamer\\config.yaml`.",
+        "Die Einstellungen liegen im Ordner `C:\\Users\\amer7\\AppData\\Local\\openamer\\config.yaml`."
+      ],
+      "muss": [
+        "config.yaml"
+      ]
+    },
+    {
+      "id": "V10",
+      "kategorie": "status",
+      "bestanden": true,
+      "antworten": [
+        "Ja",
+        "Ja"
+      ],
+      "muss": [
+        "ja"
+      ]
+    }
+  ]
+}

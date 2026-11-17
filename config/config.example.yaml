@@ -1,0 +1,27 @@
+# OpenAmer-OS — Konfigurationsvorlage (Ebene 4: WSL + GPU)
+#
+# Diese Werte sind die gemessene, funktionierende Kombination vom 17.11.2026:
+#   RTX 5060 8151 MiB, 7B-Modell, 65.536 Kontext -> 6,26/6,84 GB VRAM (91 %)
+#
+# Anwenden:
+#   cp config/config.example.yaml ~/.openamer/config.yaml
+#   # oder einzeln:
+#   openamer config set model.default openamer-max-7b
+#
+# WICHTIG: Der Agent prueft den TATSÄCHLICH von Ollama geladenen Kontext,
+# nicht diesen Wert. Das Modell muss mit num_ctx 65536 erzeugt sein:
+#   PARAMETER num_ctx 65536   (im Modelfile, siehe model/openamer-max-one/)
+
+model:
+  provider: ollama
+  base_url: http://127.0.0.1:11434/v1
+  # Muss ein Modell mit 65536 Kontext sein.
+  default: openamer-max-7b
+  # Beide Werte auf 65536 — sonst bricht der Agent mit
+  # "runtime context is too small for OpenAmer tool use" ab.
+  ollama_num_ctx: 65536
+  context_length: 65536
+
+# Optional: Grenzen fuer lange Laeufe
+agent:
+  max_turns: 90

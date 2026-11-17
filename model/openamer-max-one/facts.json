@@ -1,0 +1,103 @@
+{
+  "version": "1.0",
+  "stand": "2026-11-17",
+  "hinweis": "Wissensbasis fuer OpenAmer-Max-One. Wissen wird verdrahtet (RAG), nicht trainiert. Neue Fakten kosten kein Neutraining.",
+  "facts": [
+    {
+      "title": "Was ist OpenAmer?",
+      "text": "OpenAmer ist ein KI-Agent, der lokal auf dem eigenen Rechner laeuft: Terminal, Desktop-App, Browser und Messenger. Er fuehrt Aufgaben aus (Dateien, Code, Netz, Browser), statt nur zu antworten. Entwickelt von Amer Sacirovic."
+    },
+    {
+      "title": "Wer hat OpenAmer entwickelt?",
+      "text": "Amer Sacirovic, in der Schweiz. OpenAmer ist als offenes Projekt gebaut und wird von ihm selbst weiterentwickelt."
+    },
+    {
+      "title": "Was kostet OpenAmer?",
+      "text": "Der Agent selbst kostet nichts. Es gibt keine Pflicht-Abo. Kosten entstehen nur, wenn ein bezahlter Modellanbieter genutzt wird; lokale Modelle und kostenlose Anbieter sind moeglich."
+    },
+    {
+      "title": "Braucht OpenAmer eine Internetverbindung?",
+      "text": "Fuer lokale Modelle nein: der Agent und ein lokales Modell laufen ohne Netz. Fuer Websuche, Cloud-Modelle und Messenger braucht es eine Verbindung."
+    },
+    {
+      "title": "Auf welchen Geraeten laeuft OpenAmer?",
+      "text": "Windows, Linux, macOS, WSL2 und Android. iOS wird nicht unterstuetzt, dafuer gibt es eine PWA im Browser."
+    },
+    {
+      "title": "Brauche ich eine Anmeldung?",
+      "text": "Nein. Es gibt kein Konto und keinen Login. Ein API-Schluessel ist nur noetig, wenn ein Cloud-Anbieter genutzt wird."
+    },
+    {
+      "title": "Was ist OpenAmer Agent-Max?",
+      "text": "OpenAmer Agent-Max ist die Max-Ausbaustufe: Agent, eigenes Modell (OpenAmer-Max-One) und eigenes Betriebssystem (OpenAmer-OS) als ein Projekt. Kommandozentrale ist der Befehl omx."
+    },
+    {
+      "title": "Was ist OpenAmer-Max-One?",
+      "text": "OpenAmer-Max-One ist das eine OpenAmer-Modell: Text, Vision, Denken, Werkzeuge, Entscheidungen und Einbetten in einer Stufe. Wissen kommt aus Nachschlagen, Verhalten aus Training."
+    },
+    {
+      "title": "Was ist OpenAmer OS?",
+      "text": "OpenAmer-OS hat zwei Ebenen: einen freestanding Rust-Kernel, der in QEMU bootet, und ein Userspace-Image, in dem der Agent als Dienst laeuft."
+    },
+    {
+      "title": "Welche Modellstufen gibt es?",
+      "text": "Die Familie heisst OpenAmer-Max und ist nach Parameterzahl gestuft: Watch bis 1B, Phone 1-5B, Tab 5-10B, Desktop 10-20B, Pro 20-30B, Ultra 30-100B, dann Mega und Giga."
+    },
+    {
+      "title": "Was unterscheidet OpenAmer von einem Chatbot?",
+      "text": "OpenAmer fuehrt aus: Terminalbefehle, Dateien, Browser, Code, Zeitplaene. Ein Chatbot beschreibt, was man tun koennte; OpenAmer tut es und prueft das Ergebnis."
+    },
+    {
+      "title": "Was kann OpenAmer nicht?",
+      "text": "iOS-Apps bauen geht nicht ohne Mac. Ein lokales Modell ersetzt kein 100B-Modell im Wissen. Und ohne Netz gibt es keine Websuche."
+    },
+    {
+      "title": "Wo liegen meine Daten?",
+      "text": "Lokal auf dem eigenen Rechner, im OpenAmer-Verzeichnis: Sitzungen, Skills, Konfiguration, Protokolle. Es gibt keine Telemetrie an den Entwickler."
+    },
+    {
+      "title": "Was sind Skills?",
+      "text": "Skills sind gespeicherte Arbeitsanleitungen als SKILL.md. Der Agent laedt sie bei Bedarf und wird dadurch bei wiederkehrenden Aufgaben schneller und verlaesslicher."
+    },
+    {
+      "title": "Was ist das Gedaechtnis von OpenAmer?",
+      "text": "Zwei Ebenen: ein dauerhaftes Notiz-Gedaechtnis fuer Vorlieben und Umgebungsfakten, und der Sitzungsverlauf in einer lokalen Datenbank, der durchsuchbar bleibt."
+    },
+    {
+      "title": "Wie prueft OpenAmer seine Ergebnisse?",
+      "text": "Durch Messen statt Behaupten: Build-Ausgaben, Health-Checks, Screenshots, Testlaeufe. Ein Bericht ohne echte Ausgabe gilt nicht als Nachweis."
+    },
+    {
+      "title": "Kann OpenAmer Bilder lesen?",
+      "text": "Ja. Screenshots und Fotos werden als Bild in die Sitzung geladen und ausgewertet, etwa um Fehlermeldungen in einer Oberflaeche zu finden."
+    },
+    {
+      "title": "Was ist die Kommandozentrale omx?",
+      "text": "omx ist der eine Befehl fuer das ganze Projekt: omx doctor misst die Umgebung, omx model baut und prueft das Modell, omx os baut das Betriebssystem-Image."
+    },
+    {
+      "title": "Warum ein kleineres Modell statt eines grossen?",
+      "text": "Weil Faehigkeit nicht nur aus Groesse kommt: nachschlagen, ausfuehren, pruefen, erinnern, sehen und entscheiden machen ein kleineres Modell bei echten Aufgaben brauchbar."
+    },
+    {
+      "title": "Wie wird OpenAmer-Max-One trainiert?",
+      "text": "Mit QLoRA auf einem Basismodell. Trainiert werden Werkzeugformat, Entscheidungen, Antwortform und Bilddeutung. Wissen, Einbetten und Gedenken werden verdrahtet."
+    },
+    {
+      "title": "Was bedeutet ehrlich bei OpenAmer?",
+      "text": "Fehlt eine Information, sagt OpenAmer das und erfindet keine Zahl. Scheitert ein Build, wird der echte Fehler gemeldet statt einer erfundenen Loesung."
+    },
+    {
+      "title": "Wie viele Werkzeuge hat OpenAmer?",
+      "text": "Die Anzahl haengt von der Installation ab und wird nicht behauptet, sondern gemessen: der Befehl openamer tools listet sie auf."
+    },
+    {
+      "title": "Kann OpenAmer Musik oder Video erzeugen?",
+      "text": "OpenAmer erzeugt Bilder, Sprache und Text. Musikdateien und fertige Videos entstehen nicht im Modell; Video wird aus Bausteinen mit ffmpeg gebaut."
+    },
+    {
+      "title": "Wie wird OpenAmer-OS gebaut?",
+      "text": "Der Kernel wird mit Rust nightly gebaut und in QEMU gestartet. Das Userspace-Image wird als Container gebaut und enthaelt den Agenten als Dienst."
+    }
+  ]
+}

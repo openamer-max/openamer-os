@@ -1,0 +1,105 @@
+{
+  "version": "1.0",
+  "eingefroren": "2026-11-17",
+  "regel": "Bild-Pruefsatz. Quelle sind echte eigene Screenshots, keine gekauften Testbilder. Nur mit einem multimodalen Modell lauffaehig. Pfade sind relativ zum Projektordner (testdata/vision/), damit der Satz portabel bleibt.",
+  "cases": [
+    {
+      "id": "V01",
+      "kategorie": "log_lesen",
+      "bild": "testdata/vision/Screenshot 2026-11-17 170326.png",
+      "frage": "Welche Python-Version meldet der Installer? Antworte mit der Versionsnummer.",
+      "muss": [
+        "3.11.17",
+        "3.11"
+      ]
+    },
+    {
+      "id": "V02",
+      "kategorie": "log_lesen",
+      "bild": "testdata/vision/Screenshot 2026-11-17 170326.png",
+      "frage": "Welche Git-Version wird gefunden?",
+      "muss": [
+        "2.54"
+      ]
+    },
+    {
+      "id": "V03",
+      "kategorie": "log_lesen",
+      "bild": "testdata/vision/Screenshot 2026-11-17 170326.png",
+      "frage": "Was steht am Ende der Ausgabe, nach dem git-Hinweis? Nenne das Wort aus der Zeile 'HEAD is now at'.",
+      "muss": [
+        "cde9d39"
+      ]
+    },
+    {
+      "id": "V04",
+      "kategorie": "tui_lesen",
+      "bild": "testdata/vision/Screenshot 2026-11-17 171223.png",
+      "frage": "Welches Modell laeuft in der OpenAmer-Oberflaeche? Nenne den Modellnamen.",
+      "muss": [
+        "deepseek"
+      ]
+    },
+    {
+      "id": "V05",
+      "kategorie": "tui_lesen",
+      "bild": "testdata/vision/Screenshot 2026-11-17 171223.png",
+      "frage": "Wie viele Skills meldet die Oberflaeche? Nenne die Zahl.",
+      "muss": [
+        "314"
+      ]
+    },
+    {
+      "id": "V06",
+      "kategorie": "fehler_finden",
+      "bild": "testdata/vision/Screenshot 2026-11-17 170442.png",
+      "frage": "Ist dieser Build erfolgreich oder fehlerhaft? Antworte mit einem Wort.",
+      "muss": [
+        "erfolgreich",
+        "ok",
+        "ja",
+        "yes",
+        "success"
+      ]
+    },
+    {
+      "id": "V07",
+      "kategorie": "fehler_finden",
+      "bild": "testdata/vision/Screenshot 2026-11-17 171018.png",
+      "frage": "Welche Funktionen der Werkzeugliste sind als fehlend markiert? Nenne zwei.",
+      "muss": [
+        "web search",
+        "browser automation",
+        "skills hub"
+      ]
+    },
+    {
+      "id": "V08",
+      "kategorie": "fehler_finden",
+      "bild": "testdata/vision/Screenshot 2026-11-17 170948.png",
+      "frage": "Welcher Login schlaegt fehl und mit welchem Fehler? Nenne den Fehlercode.",
+      "muss": [
+        "11001",
+        "getaddrinfo"
+      ]
+    },
+    {
+      "id": "V09",
+      "kategorie": "pfad_lesen",
+      "bild": "testdata/vision/Screenshot 2026-11-17 171136.png",
+      "frage": "In welchem Ordner liegen laut Bild die Einstellungen? Nenne den Dateinamen.",
+      "muss": [
+        "config.yaml"
+      ]
+    },
+    {
+      "id": "V10",
+      "kategorie": "status",
+      "bild": "testdata/vision/Screenshot 2026-11-17 171136.png",
+      "frage": "Steht die Installation am Ende auf Erfolg? Antworte mit ja oder nein.",
+      "muss": [
+        "ja"
+      ]
+    }
+  ]
+}

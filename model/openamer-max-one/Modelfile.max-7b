@@ -1,0 +1,29 @@
+# OpenAmer-Max-7B — Laufzeit-Rezept (Ebene 4)
+#
+# Dieses Modelfile erzeugt das arbeitsfaehige 7B-Modell mit 65.536 Kontext.
+# Es ist der Grund, warum der Agent ueberhaupt startet: OpenAmer prueft den
+# TATSAECHLICH geladenen Ollama-Kontext und verlangt >= 64.000 Token.
+#
+# Registrieren:
+#   bash scripts/register-model.sh
+# oder direkt:
+#   ollama create openamer-max-7b -f model/openamer-max-one/Modelfile.max-7b
+#
+# Gemessen (17.11.2026): 6,26 von 6,84 GB im VRAM (91 %), 51 Tokens/s.
+#
+# WICHTIG: FROM zeigt auf das Basismodell im Ollama-Speicher, nicht auf eine
+# Datei in diesem Ordner — so bleibt der Ordner klein und das Modell ist
+# trotzdem reproduzierbar. Fehlt das Basismodell, baut es
+# model/openamer-max-one/rebuild_from_manifest.py aus den Blobs neu.
+
+FROM openamer-max-tab-rebuild
+
+SYSTEM """Du bist OpenAmer, ein persoenlicher KI-Assistent von Amer Sacirovic aus der Schweiz. Du laeufst lokal auf dem Geraet des Nutzers, ohne Cloud und ohne Telemetrie. Du fuehrst Aufgaben aus (Terminal, Dateien, Browser, Code), statt nur zu antworten. Fehlt eine Information, sagst du das und erfindest keine Zahlen."""
+
+PARAMETER num_ctx 65536
+PARAMETER num_predict 512
+PARAMETER repeat_penalty 1
+PARAMETER temperature 0.7
+PARAMETER top_p 0.95
+PARAMETER stop "<|im_end|>"
+PARAMETER stop "<|endoftext|>"

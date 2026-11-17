@@ -1,0 +1,38 @@
+# OpenAmer-OS mit Agent — Ebene 2b
+#
+# Baut auf dem Runtime-Image auf und installiert den Agenten fest hinein.
+# Damit ist der Container reproduzierbar: kein Volume-Trick, kein Nachinstallieren
+# beim ersten Start.
+#
+# WICHTIG (gemessen): das Projekt verweigert den Wheel-Bau —
+#   "Building wheels or sdists for openamer-agent is not supported"
+# Nur ein editable install ist erlaubt. Deshalb liegt der Quellbaum dauerhaft
+# unter /opt/openamer/src und wird nicht geloescht.
+#
+# Bau (aus os/openamer-os/):
+#   omx os pack                      # Python-Teile als om-src.tgz (12 MB)
+#   omx os build --with-agent        # oder direkt:
+#   docker build -f Dockerfile.agent -t openamer-os:0.1-agent .
+#
+# Start:
+#   docker run --rm -it -v openamer-data:/data openamer-os:0.1-agent
+
+FROM openamer-os:0.1
+
+USER root
+
+COPY om-src.tgz /tmp/om-src.tgz
+
+RUN mkdir -p /opt/openamer/src \
+    && tar -xzf /tmp/om-src.tgz -C /opt/openamer/src \
+    && python3 -m venv /opt/openamer/venv \
+    && /opt/openamer/venv/bin/pip install --no-cache-dir --upgrade pip \
+    && /opt/openamer/venv/bin/pip install --no-cache-dir -e /opt/openamer/src \
+    && chown -R openamer:openamer /opt/openamer \
+    && rm -f /tmp/om-src.tgz
+
+# Beweis beim Bauen: das Binary muss da und startbar sein.
+RUN /opt/openamer/venv/bin/openamer --version \
+    || /opt/openamer/venv/bin/openamer --help > /dev/null
+
+USER openamer
