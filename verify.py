@@ -148,29 +148,40 @@ check("Titel+Text ueberall", all(f.get("title") and f.get("text") for f in facts
 
 # ---------------------------------------------------------------- Datensatz
 section("Trainingssatz")
-rows = [json.loads(l) for l in
-        (MDIR / "data" / "max_one_sft.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
-check("Datensatz gefuellt", len(rows) > 150, f"{len(rows)} Zeilen")
-check("jede Zeile user->assistant mit Inhalt", all(
-    len(r.get("messages", [])) == 2
-    and r["messages"][0]["role"] == "user" and r["messages"][1]["role"] == "assistant"
-    and r["messages"][0]["content"].strip() and r["messages"][1]["content"].strip()
-    for r in rows))
+DATA = MDIR / "data" / "max_one_sft.jsonl"
+rows = None
+if not DATA.is_file():
+    # Ein frischer Klon ohne Trainingsdaten darf die Pruefung nicht abbrechen:
+    # frueher warf das hier FileNotFoundError und der ganze Lauf starb an
+    # Zeile 152 — Strukturpruefungen liefen nie.
+    print(f"  SKIP  Trainingssatz fehlt ({DATA.name}) — Zeilen/Verteilung ungeprueft")
+else:
+    rows = [json.loads(l) for l in DATA.read_text(encoding="utf-8").splitlines() if l.strip()]
 
-kinds: dict[str, int] = {}
-for r in rows:
-    kinds[r.get("kind", "?")] = kinds.get(r.get("kind", "?"), 0) + 1
-check("Skill-Anteil <= 25 % (kein FAQ-Automat)", kinds.get("skill", 0) / len(rows) <= 0.25,
-      f"{kinds.get('skill', 0) / len(rows):.1%}")
-behaviour = sum(v for k, v in kinds.items() if k in (
-    "werkzeug", "entscheidung", "form", "stopp", "identitaet", "produkt_grenze", "rechnen"))
-check("Verhaltensanteil >= 15 %", behaviour / len(rows) >= 0.15, f"{behaviour / len(rows):.1%}")
+if rows is None:
+    pass
+else:
+    check("Datensatz gefuellt", len(rows) > 150, f"{len(rows)} Zeilen")
+    check("jede Zeile user->assistant mit Inhalt", all(
+        len(r.get("messages", [])) == 2
+        and r["messages"][0]["role"] == "user" and r["messages"][1]["role"] == "assistant"
+        and r["messages"][0]["content"].strip() and r["messages"][1]["content"].strip()
+        for r in rows))
 
-# Kontamination: kein Prompt darf woertlich eine Pruefsatzfrage sein
-frozen = {c["frage"].strip().lower()
-          for n in ("tasks", "vision") for c in load(f"testset_{n}.json")["cases"]}
-leaks = [r for r in rows if r["messages"][0]["content"].strip().lower() in frozen]
-check("keine Pruefsatz-Kontamination", not leaks, f"{len(leaks)} Treffer")
+    kinds: dict[str, int] = {}
+    for r in rows:
+        kinds[r.get("kind", "?")] = kinds.get(r.get("kind", "?"), 0) + 1
+    check("Skill-Anteil <= 25 % (kein FAQ-Automat)", kinds.get("skill", 0) / len(rows) <= 0.25,
+          f"{kinds.get('skill', 0) / len(rows):.1%}")
+    behaviour = sum(v for k, v in kinds.items() if k in (
+        "werkzeug", "entscheidung", "form", "stopp", "identitaet", "produkt_grenze", "rechnen"))
+    check("Verhaltensanteil >= 15 %", behaviour / len(rows) >= 0.15, f"{behaviour / len(rows):.1%}")
+
+    # Kontamination: kein Prompt darf woertlich eine Pruefsatzfrage sein
+    frozen = {c["frage"].strip().lower()
+              for n in ("tasks", "vision") for c in load(f"testset_{n}.json")["cases"]}
+    leaks = [r for r in rows if r["messages"][0]["content"].strip().lower() in frozen]
+    check("keine Pruefsatz-Kontamination", not leaks, f"{len(leaks)} Treffer")
 
 # ---------------------------------------------------------------- Manifest-Werkzeug
 section("Manifest-Reparatur")

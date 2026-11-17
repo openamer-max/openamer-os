@@ -12,7 +12,6 @@ agent/python/
 
 # --- Trainings- und Laufzeitdaten ---
 model/openamer-max-one/reports/*.log
-model/openamer-max-one/data/*.jsonl
 out_*/
 checkpoints/
 *.log
