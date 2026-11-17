@@ -10,7 +10,7 @@ OpenAmer All in One/
 ├── ARCHITEKTUR.md         ← Aufbau, Datenfluss, Messregeln
 ├── CHANGELOG.md           ← was sich geändert hat
 ├── VERSION                ← 0.4.0
-├── verify.py              ← kanonische Prüfung (62 Linux / 58 Windows Checks)
+├── verify.py              ← kanonische Prüfung (71 Checks mit Agent, 65 auf frischem Klon)
 ├── omx, omx.cmd, omx.py   ← Kommandozentrale
 ├── start.sh               ← Starter Linux/WSL (arbeitet aus diesem Ordner)
 ├── OpenAmer-OS.cmd        ← Starter Windows
@@ -37,6 +37,18 @@ Agent, Laufzeit und Modellrezept liegen **im** Ordner — kein Verweis nach auß
 Nur zwei Dinge bleiben außerhalb, weil sie dort hingehören: die
 **Modellgewichte** (liegen im Ollama-Speicher, 4,7 GB — nicht dupliziert) und
 das **Agent-Home** `~/.openamer` (Sitzungen, Gedächtnis, Konfiguration).
+
+## Herunterladen
+
+| Was | Wo | Größe |
+|---|---|---|
+| **Live-ISO** (bootet ohne Installation) | [Release v0.4.0](https://github.com/openamer-max/openamer-os/releases/latest/download/openamer-os-20261117.iso) | 2,0 GB |
+| **Quellcode** (dieses Repo) | `git clone https://github.com/openamer-max/openamer-os` | 14 MB |
+| **Spiegel der ISO** | [HuggingFace Dataset](https://huggingface.co/datasets/openamer-max/openamer-os) | 2,0 GB |
+
+Prüfsumme: liegt als `SHA256SUMS.txt` im Release und im HF-Dataset. Beide Spiegel
+liefern byte-identische Dateien (Kopf-Hash und ISO-9660-Signatur `CD001` bei
+Offset 0x8001 geprüft), Gesamtgröße 2.100.226.048 B.
 
 ## Installieren
 
