@@ -253,7 +253,18 @@ else:
 # ---------------------------------------------------------------- ISO
 section("ISO")
 isos = sorted((ROOT / "dist").glob("openamer-os-*.iso")) if (ROOT / "dist").is_dir() else []
-check("ISO in dist/ vorhanden", bool(isos), f"{len(isos)} Datei(en)")
+if isos:
+    check("ISO in dist/ vorhanden", True, f"{len(isos)} Datei(en)")
+else:
+    # Ein frischer Klon hat keine 2,0-GB-ISO im Repo (.gitignore) — sie liegt als
+    # Release-Asset. Das ist kein Mangel des Klons, also dort nachsehen.
+    rc, rel = shell("curl -s --max-time 15 https://api.github.com/repos/openamer-max/"
+                    "openamer-os/releases/latest | grep -c 'openamer-os-.*[.]iso'")
+    if rel.strip() not in ("", "0"):
+        print("  SKIP  ISO nicht lokal — liegt im Release "
+              "(https://github.com/openamer-max/openamer-os/releases/latest)")
+    else:
+        check("ISO in dist/ vorhanden", False, "0 Datei(en), auch kein Release-Asset")
 if isos:
     biggest = max(isos, key=lambda p: p.stat().st_size)
     mb = biggest.stat().st_size / 1e6
@@ -280,9 +291,14 @@ rc, out = shell(
     "test -x $HOME/openamer-os/venv/bin/openamer && echo HOME_OK; "
     "test -e /dev/dxg && echo GPU_OK; "
     "curl -s --max-time 4 http://127.0.0.1:11434/api/tags | grep -c 'openamer-max-7b'")
-check("Agent installiert", "ORDNER_OK" in out or "HOME_OK" in out,
-      "im Projektordner" if "ORDNER_OK" in out else "in $HOME") if (ROOT / "agent").is_dir() or not IS_WIN else print(
-    "  SKIP  Agent-Installation — Quell-Ordner unter Windows (Laufzeit liegt im Ziel)")
+_agent_ok = ("ORDNER_OK" in out) or ("HOME_OK" in out)
+if _agent_ok:
+    check("Agent installiert", True, "im Projektordner" if "ORDNER_OK" in out else "in $HOME")
+elif (ROOT / "agent").is_dir() or not IS_WIN:
+    # Frischer Klon: die Laufzeit entsteht erst durch scripts/install.sh.
+    print("  SKIP  Agent nicht installiert — erst 'bash scripts/install.sh' (Windows: INSTALL.cmd)")
+else:
+    print("  SKIP  Agent-Installation — Quell-Ordner unter Windows (Laufzeit liegt im Ziel)")
 check("GPU-Passthrough aktiv (/dev/dxg)", "GPU_OK" in out)
 tail = out.strip().splitlines()[-1:] if out.strip() else []
 check("Modell openamer-max-7b vorhanden", tail not in ([], ["0"]), f"{tail}")
@@ -316,9 +332,14 @@ if IS_WIN:
     except Exception as exc:
         check("Starter startet den Agenten", False, f"{type(exc).__name__}: {exc}")
 else:
-    rc, out = shell(f"bash '{ROOT}/start.sh' --version", timeout=120)
-    check("start.sh startet den Agenten", "OpenAmer Agent v" in out,
-          out.strip().splitlines()[-1] if out.strip() else f"rc={rc}")
+    if not _agent_ok:
+        # start.sh beendet sich ohne Agent mit Code 2 ("Einrichten: install.sh").
+        # Das ist auf einem frischen Klon korrekt und kein Fehlschlag.
+        print("  SKIP  start.sh-Start — Agent noch nicht installiert (bash scripts/install.sh)")
+    else:
+        rc, out = shell(f"bash '{ROOT}/start.sh' --version", timeout=120)
+        check("start.sh startet den Agenten", "OpenAmer Agent v" in out,
+              out.strip().splitlines()[-1] if out.strip() else f"rc={rc}")
 
 rc, out = shell("command -v openamer >/dev/null && echo PATH_OK")
 check("Befehl openamer global im PATH", "PATH_OK" in out)
