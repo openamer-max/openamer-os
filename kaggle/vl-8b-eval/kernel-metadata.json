@@ -1,0 +1,14 @@
+{
+  "id": "amersacirovic/openamer-max-vl-8b-eval",
+  "title": "openamer-max-vl-8b-eval",
+  "code_file": "eval.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": ["amersacirovic/openamer-max-vl-8b-qlora-full"],
+  "model_sources": []
+}
