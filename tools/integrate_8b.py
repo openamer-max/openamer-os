@@ -19,6 +19,7 @@ NICHT; dieses Werkzeug setzt 16384.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -99,6 +100,39 @@ def adapter_finden() -> Path | None:
             if treffer:
                 return treffer[0].parent
     return None
+
+
+def adapter_stempel(adapter: Path) -> str:
+    """Kennung des Adapters (Groesse + Kopf-Hash) fuer den Zwischenspeicher.
+
+    Ohne diese Kennung wuerde das Werkzeug eine vorhandene gemergte Basis
+    wiederverwenden, auch wenn ein ANDERER Adapter vorliegt — beim ersten echten
+    Lauf waere still das Testmodell erneut gebaut worden (Fund 18.11.2026).
+    """
+    datei = next((adapter / n for n in ADAPTER_KANDIDATEN if (adapter / n).is_file()), None)
+    if datei is None:
+        return "ohne-adapter"
+    kopf = datei.open("rb").read(1 << 20)
+    return f"{datei.stat().st_size}-{hashlib.sha256(kopf).hexdigest()[:16]}"
+
+
+def zwischenspeicher_pruefen(adapter: Path) -> None:
+    """Verwirft Zwischenstaende, wenn sie zu einem anderen Adapter gehoeren."""
+    stempel_datei = WORK / "adapter.stempel"
+    ist = adapter_stempel(adapter)
+    war = stempel_datei.read_text(encoding="utf-8").strip() if stempel_datei.is_file() else ""
+    if war and war != ist:
+        sag(f"anderer Adapter ({war[:18]} -> {ist[:18]}) — Zwischenstaende werden neu gebaut")
+        for pfad in (WORK / "merged",):
+            shutil.rmtree(pfad, ignore_errors=True)
+        for pfad in WORK.glob("merged-f16.gguf"):
+            pfad.unlink(missing_ok=True)
+        for pfad in WORK.glob("*-Q4_K_M.gguf"):
+            pfad.unlink(missing_ok=True)
+    WORK.mkdir(parents=True, exist_ok=True)
+    stempel_datei.write_text(ist, encoding="utf-8")
+    ok_kurz = "Zwischenspeicher passt zum Adapter" if war == ist else "Zwischenspeicher markiert"
+    sag(ok_kurz)
 
 
 def preflight() -> int:
@@ -204,6 +238,7 @@ def main() -> int:
         return 1
     deps()
     WORK.mkdir(parents=True, exist_ok=True)
+    zwischenspeicher_pruefen(adapter)
     bin_dir = werkzeuge()
     basis = basis_laden()
 
