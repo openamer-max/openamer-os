@@ -173,18 +173,20 @@ def build_example(proc, row: dict, base: Path, max_len: int) -> dict | None:
     labels = enc["input_ids"].clone()
     cut = pre["input_ids"].shape[1]
     labels[:, :cut] = -100
-    # Batch-Dimension nur bei den 1-D-Feldern entfernen. image_grid_thw ist (1,3)
-    # und MUSS diese Form behalten: der Vision-Teil rechnet
-    # grid_thw[:, 0] * grid_thw[:, 1] * grid_thw[:, 2]. Mit v[0] wurde daraus (3,)
-    # und der Lauf starb an "too many indices for tensor of dimension 1"
-    # (gemessen: Smoke-Lauf 18.11.2026, Schritt 24 von 25 — die ersten 23 Schritte
-    # waren Text, das erste Bild killte den Lauf).
-    keep_2d = {"image_grid_thw"}
+    # Nur die TOKEN-Felder haben eine fuehrende Batch-Dimension (1, L) und
+    # brauchen v[0]. Die Bild-Felder NICHT anfassen — gemessene Rohformen:
+    #   pixel_values   (744, 1536)   744 Patches x 1536 Dimensionen
+    #   image_grid_thw (1, 3)
+    # Mit v[0] auf alles wurde aus pixel_values (1536,) — also EIN Patch von 744,
+    # und aus image_grid_thw (3,), was den Lauf mit
+    # "too many indices for tensor of dimension 1" killte
+    # (Smoke-Lauf 18.11.2026: 23 Text-Schritte liefen, das erste Bild starb).
+    keep_as_is = {"image_grid_thw", "pixel_values"}
     out = {}
     for k, v in enc.items():
         if not hasattr(v, "shape"):
             continue
-        out[k] = v if k in keep_2d else v[0]
+        out[k] = v if k in keep_as_is else v[0]
     out["labels"] = labels[0]
     return out
 
@@ -343,8 +345,18 @@ def dry_run() -> None:
         g = ex["image_grid_thw"]
         log(f"Bild-Beispiel: grid_thw {tuple(g.shape)} (ndim={g.ndim}) · "
             f"pixel_values {tuple(ex['pixel_values'].shape)}")
+    # Zwei Vertraege, die am 18.11.2026 beide verletzt waren:
+    #   grid_thw 2-dimensional (n,3) — sonst IndexError im Vision-Teil
+    #   pixel_values 2-dimensional (patches, dim) — sonst nur EIN Patch statt 744
     if bilder and any(ex["image_grid_thw"].ndim != 2 for ex in bilder):
-        raise RuntimeError("image_grid_thw ist nicht (n,3) — Collator/Beispielbau pruefen")
+        raise RuntimeError("image_grid_thw ist nicht (n,3) — Beispielbau pruefen")
+    if bilder and any(ex["pixel_values"].dim() != 2 for ex in bilder):
+        raise RuntimeError("pixel_values ist nicht (patches, dim) — Beispielbau pruefen")
+    if bilder:
+        n_patch = bilder[0]["pixel_values"].shape[0]
+        log(f"Bild-Beispiel: {n_patch} Patches (muss > 1 sein, nicht 1)")
+        if n_patch <= 1:
+            raise RuntimeError(f"nur {n_patch} Patch — Bild waere unbrauchbar")
     log(f"DRY_RUN ok · {len(data)} Beispiele · {stats}")
 
 
