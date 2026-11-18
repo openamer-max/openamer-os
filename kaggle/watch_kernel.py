@@ -13,8 +13,8 @@ from pathlib import Path
 
 from kaggle.api.kaggle_api_extended import KaggleApi
 
-REF = "amersacirovic/openamer-max-vl-8b-qlora"
-OUT = Path(r"C:\Users\amer7\omx-kaggle")
+REF = sys.argv[1] if len(sys.argv) > 1 else "amersacirovic/openamer-max-vl-8b-qlora"
+OUT = Path(r"C:\Users\amer7\omx-kaggle") / REF.split("/")[-1]
 TERMINAL = {"COMPLETE", "ERROR", "CANCEL_ACKNOWLEDGED", "CANCELED"}
 
 api = KaggleApi()

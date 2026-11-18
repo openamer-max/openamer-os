@@ -30,6 +30,7 @@ WORK = Path("/kaggle/working") if Path("/kaggle").is_dir() else Path.home() / "o
 BASE_NAME = "max_full_sft.jsonl"
 MODEL_ID = os.environ.get("OM_BASE", "Qwen/Qwen3-VL-8B-Instruct")
 MAX_STEPS = int(os.environ.get("OM_STEPS", "25"))
+EPOCHS = float(os.environ.get("OM_EPOCHS", "0"))
 SEQ = int(os.environ.get("OM_SEQ", "1024"))
 DRY = os.environ.get("DRY_RUN") == "1"
 
@@ -99,6 +100,32 @@ def load_rows(base: Path) -> tuple[list[dict], dict]:
 
 
 # ---------------------------------------------------------------- 3. Prompt-Bau
+def serialize_tool_row(row: dict) -> tuple[str, str] | None:
+    """Werkzeug-Zeile (user -> tool_calls -> tool -> assistant) als zwei Nachrichten.
+
+    Warum als Text: der Trainer arbeitet mit einfachen user/assistant-Paaren. Ohne
+    diese Serialisierung wurden die 40 Werkzeug-Zeilen **verworfen** — dann gibt es
+    keinen einzigen Lernreiz fuer Werkzeug-Nutzung. Der Preis ist ehrlich: das Modell
+    lernt das Muster, nicht die native function-calling-Schnittstelle.
+    """
+    msgs = row.get("messages") or []
+    if len(msgs) < 3:
+        return None
+    user = (msgs[0].get("content") or "").strip()
+    calls = [m for m in msgs if m.get("tool_calls")]
+    results = [m for m in msgs if m.get("role") == "tool"]
+    final = (msgs[-1].get("content") or "").strip()
+    if not user or not calls or not results or not final:
+        return None
+    fn = calls[0]["tool_calls"][0].get("function", {})
+    name, args = fn.get("name", "?"), fn.get("arguments", "{}")
+    antwort = (f"Werkzeug: {name}\n"
+               f"Eingabe: {args}\n"
+               f"Ergebnis: {(results[0].get('content') or '').strip()}\n\n"
+               f"Antwort: {final}")
+    return user, antwort
+
+
 def build_example(proc, row: dict, base: Path, max_len: int) -> dict | None:
     """(input_ids, attention_mask, labels, pixel_values...) fuer eine Zeile.
 
@@ -109,9 +136,13 @@ def build_example(proc, row: dict, base: Path, max_len: int) -> dict | None:
     from PIL import Image
 
     msgs = row.get("messages") or []
-    if len(msgs) != 2 or msgs[0].get("role") != "user" or msgs[1].get("role") != "assistant":
-        return None
-    frage, antwort = msgs[0]["content"], msgs[1]["content"]
+    if len(msgs) == 2 and msgs[0].get("role") == "user" and msgs[1].get("role") == "assistant":
+        frage, antwort = msgs[0]["content"], msgs[1]["content"]
+    else:
+        paar = serialize_tool_row(row)
+        if paar is None:
+            return None
+        frage, antwort = paar
     if not (frage or "").strip() or not (antwort or "").strip():
         return None
 
@@ -213,16 +244,20 @@ def train(base: Path) -> None:
                 out[key] = torch.cat(vals, dim=0)
         return out
 
+    # OM_EPOCHS>0 schlaegt OM_STEPS: fuer den echten Lauf will man Epochen,
+    # fuer den Smoke-Test harte Schritte.
+    steps_kw = {"num_train_epochs": EPOCHS} if EPOCHS > 0 else {"max_steps": MAX_STEPS}
     args = TrainingArguments(
         output_dir=str(WORK / "out"), per_device_train_batch_size=1,
-        gradient_accumulation_steps=4, max_steps=MAX_STEPS, learning_rate=2e-4,
+        gradient_accumulation_steps=4, learning_rate=2e-4, **steps_kw,
         logging_steps=1, save_steps=MAX_STEPS, save_total_limit=1,
         gradient_checkpointing=True, gradient_checkpointing_kwargs={"use_reentrant": False},
         fp16=dtype == torch.float16, bf16=dtype == torch.bfloat16,
         optim="paged_adamw_8bit", lr_scheduler_type="cosine", warmup_steps=5,
         report_to=[], remove_unused_columns=False, dataloader_pin_memory=False)
     trainer = Trainer(model=model, args=args, train_dataset=data, data_collator=collate)
-    log(f"Training startet: {MAX_STEPS} Schritte, seq {SEQ}, {len(data)} Beispiele")
+    modus = f"{EPOCHS} Epochen" if EPOCHS > 0 else f"{MAX_STEPS} Schritte"
+    log(f"Training startet: {modus}, seq {SEQ}, {len(data)} Beispiele")
     t0 = time.time()
     res = trainer.train()
     dt = time.time() - t0
@@ -235,6 +270,28 @@ def train(base: Path) -> None:
     proc.save_pretrained(str(out))
     files = sorted(p.name for p in out.iterdir())
     log(f"Adapter gespeichert: {out} · {files}")
+
+    # Bericht als Datei: die Ausgabedateien des Kernels sind abholbar, das
+    # Lauf-Protokoll nicht. Ohne diesen Bericht muesste man im Browser nachsehen.
+    report = {
+        "modell": MODEL_ID,
+        "modus": modus,
+        "seq": SEQ,
+        "schritte": int(res.global_step) if hasattr(res, "global_step") else None,
+        "loss": round(float(res.training_loss), 4),
+        "dauer_min": round(dt / 60, 1),
+        "vram_spitze_gib": round(torch.cuda.max_memory_allocated() / 2**30, 2)
+        if torch.cuda.is_available() else None,
+        "beispiele": len(data),
+        "daten_stats": stats,
+        "adapter_dateien": files,
+        "lr": 2e-4,
+        "lora_r": 16,
+    }
+    (WORK / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=1),
+                                      encoding="utf-8")
+    log("report.json geschrieben")
+    log("BERICHT: " + json.dumps(report, ensure_ascii=False))
 
 
 def dry_run() -> None:

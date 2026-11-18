@@ -35,3 +35,4 @@ config.local.*
 # --- Kaggle-Lauf: Arbeitsordner des Smoke-Tests ---
 kaggle/**/out/
 omx-work/
+kaggle/build/
