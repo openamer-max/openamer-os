@@ -39,3 +39,4 @@ kaggle/build/
 
 # --- 1M-Experiment: Checkpoint (reproduzierbar in 43 s) ---
 model/tiny-1m/tiny.pt
+model/tiny-1m/tiny_report.json
