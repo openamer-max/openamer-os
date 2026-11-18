@@ -32,7 +32,17 @@ Eine einzelne Zahl ist kein Ergebnis.
 | 19 | Zusammenführen | GGUF aus Basis + Adapter | Datei lädt in Ollama, antwortet auf 5 Fragen, `sha256` dokumentiert | lokal/Kaggle |
 | 20 | Abschluss und Veröffentlichung | Vergleich alt gegen neu | **jede** der sieben Fähigkeiten ≥ Ausgangswert, mindestens drei messbar besser — sonst bleibt der alte Stand online | Kaggle |
 
-## Was „1 Mio. Parameter" bedeutet (gemessen, nicht geschätzt)
+## Was „1 Mio. Parameter" bedeutet — jetzt mit echtem Modell gemessen
+
+Ein Modell mit **999.232 Parametern** wurde gebaut, trainiert und gegen denselben
+Prüfsatz gestellt (`model/tiny-1m/`, 43 s CPU, reproduzierbar):
+
+| Kennzahl | 1M-Modell | 8B-VL-Basis |
+|---|---|---|
+| Prüfsatz 24 Fälle | **5/24 (21 %)** | **19/24 (79 %)** |
+| davon echte Treffer | 0 — Korpusfetzen mit Zufallswort | 19 |
+| Vision / Werkzeuge / Denken | **nicht möglich** | vorhanden bzw. im Training |
+| Val-Perplexity | 14,8 (Zufall 256) | – |
 
 | Größe | Wert |
 |---|---|
@@ -41,10 +51,10 @@ Eine einzelne Zahl ist kein Ergebnis.
 | kleinstes brauchbares Bildmodell (`SmolVLM-256M`) | 256 Mio. = **256×** |
 | kleinste eigene Stufe (`openamer-max-watch`) | 596 Mio. = **596×** |
 
-Mit 1 Mio. Parametern ist keine der sieben Fähigkeiten erreichbar — nicht knapp,
-sondern strukturell: die Wortliste eines Modells ist bereits ein Vielfaches davon.
-„1M" ist realistisch als **1 Mio. Token Kontext** (`Qwen2.5-7B-Instruct-1M` existiert)
-oder als **1 Mrd. Parameter** (Text-only, ohne Vision/Denken).
+Damit ist die Frage nicht mehr theoretisch: 1 Mio. Parameter lernen
+Zeichenstatistik (Perplexity 14,8 gegen 256 Zufall), aber keine der sieben
+Fähigkeiten. „1M" ist realistisch als **1 Mio. Token Kontext**
+(`Qwen2.5-7B-Instruct-1M` existiert) oder als **1 Mrd. Parameter** (Text-only).
 
 ## Takt
 
