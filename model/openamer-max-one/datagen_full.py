@@ -248,7 +248,11 @@ def _rechenfaelle() -> list[tuple[str, list[str], str]]:
         faelle.append((f"Ein Artikel kostet {preis} Euro, es gibt {rabatt} % Rabatt. "
                        f"Was kostet er danach?",
                        schritte, f"Er kostet danach {neu:g} Euro."))
-    return faelle
+    # Garantie an der QUELLE, nicht beim Aufrufer: eine Pruefsatzfrage darf dieses
+    # Modul gar nicht erst verlassen. Vorher stand die Filterung nur in think() —
+    # wer _rechenfaelle() direkt nutzt, bekam "Was ist 17 mal 23?" (Pruefsatz).
+    verboten = pruefsatz_fragen()
+    return [f for f in faelle if f[0].strip().lower() not in verboten]
 
 
 def think() -> list[dict]:
