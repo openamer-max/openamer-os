@@ -211,6 +211,34 @@ def build_dataset(proc, rows: list[dict], base: Path, max_len: int) -> tuple[lis
     return built, stats
 
 
+def collate_batch(batch: list[dict], pad_id: int):
+    """Macht aus Beispielen ein Batch. Modul-Ebene, damit es ohne GPU pruefbar ist.
+
+    Vertrag, der am 18.11.2026 verletzt war: `image_grid_thw` muss 2-dimensional
+    bleiben (n, 3). Der Vision-Teil rechnet grid_thw[:, 0] * [:, 1] * [:, 2].
+    """
+    import torch
+
+    mx = max(x["input_ids"].shape[0] for x in batch)
+    out = {}
+    for key in ("input_ids", "attention_mask", "labels"):
+        out[key] = torch.stack([
+            torch.nn.functional.pad(x[key], (0, mx - x[key].shape[0]),
+                                    value=(pad_id if key != "labels" else -100))
+            for x in batch])
+    # Qwen-VL: 0=Text, 1=Bild. Ohne dieses Feld keine Bild-Token-Zuordnung.
+    if batch[0].get("mm_token_type_ids") is not None:
+        out["mm_token_type_ids"] = torch.stack([
+            torch.nn.functional.pad(x["mm_token_type_ids"],
+                                    (0, mx - x["mm_token_type_ids"].shape[0]), value=0)
+            for x in batch])
+    for key in ("pixel_values", "image_grid_thw"):
+        vals = [x.get(key) for x in batch]
+        if all(v is not None for v in vals):
+            out[key] = torch.cat(vals, dim=0)
+    return out
+
+
 # ---------------------------------------------------------------- 4. Training
 def train(base: Path) -> None:
     import torch
@@ -242,25 +270,7 @@ def train(base: Path) -> None:
     pad_id = proc.tokenizer.pad_token_id or proc.tokenizer.eos_token_id
 
     def collate(batch):
-        mx = max(x["input_ids"].shape[0] for x in batch)
-        out = {}
-        for key in ("input_ids", "attention_mask", "labels"):
-            out[key] = torch.stack([
-                torch.nn.functional.pad(x[key], (0, mx - x[key].shape[0]),
-                                        value=(pad_id if key != "labels" else -100))
-                for x in batch])
-        # Qwen-VL liefert zusaetzlich mm_token_type_ids (0=Text, 1=Bild) — ohne
-        # dieses Feld kann der Prozessor die Bild-Token nicht zuordnen.
-        if batch[0].get("mm_token_type_ids") is not None:
-            out["mm_token_type_ids"] = torch.stack([
-                torch.nn.functional.pad(x["mm_token_type_ids"],
-                                        (0, mx - x["mm_token_type_ids"].shape[0]), value=0)
-                for x in batch])
-        for key in ("pixel_values", "image_grid_thw"):
-            vals = [x.get(key) for x in batch]
-            if all(v is not None for v in vals):
-                out[key] = torch.cat(vals, dim=0)
-        return out
+        return collate_batch(batch, pad_id)
 
     # OM_EPOCHS>0 schlaegt OM_STEPS: fuer den echten Lauf will man Epochen,
     # fuer den Smoke-Test harte Schritte.
