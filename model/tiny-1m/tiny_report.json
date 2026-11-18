@@ -1,0 +1,202 @@
+{
+ "parameter": 999232,
+ "schritte": 600,
+ "block": 192,
+ "batch": 8,
+ "train_min": 0.72,
+ "val_loss": 2.698,
+ "perplexity": 14.8,
+ "zufall_perplexity": 256,
+ "korpus_bytes": 105124,
+ "generierung": "Ja.\n\nFrage: Scheben keine Anleitung, abe",
+ "pruefsatz": {
+  "getroffen": 5,
+  "gesamt": 24,
+  "beispiele": [
+   {
+    "frage": "Wer hat OpenAmer entwickelt?",
+    "antwort": "Intermal stat der Befehl ungaus: Behtelae, V"
+   },
+   {
+    "frage": "Šta je OpenAmer?",
+    "antwort": "OpenAmer-Max-One ist das eine Max-Ausbaustuf"
+   },
+   {
+    "frage": "Was kostet OpenAmer?",
+    "antwort": "OpenAmer erzeugt Bilder, wird erkeine Zahl.\n"
+   }
+  ]
+ },
+ "pruefsatz_details": [
+  {
+   "id": "T01",
+   "treffer": false,
+   "wort": null,
+   "laenge": 58,
+   "antwort": "Intermal stat der Befehl ungaus: Behtelae, Version"
+  },
+  {
+   "id": "T02",
+   "treffer": true,
+   "wort": "agent",
+   "laenge": 60,
+   "antwort": "OpenAmer-Max-One ist das eine Max-Ausbaustufe: Age"
+  },
+  {
+   "id": "T03",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "OpenAmer erzeugt Bilder, wird erkeine Zahl.\n\nFrage"
+  },
+  {
+   "id": "T04",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "Ja.\n\nFrage: Sche ver er eine Anzagent von der Inst"
+  },
+  {
+   "id": "T05",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "Das me ist die Umgebung, stemal ein einer Anzahlae"
+  },
+  {
+   "id": "T06",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "Ja.\n\nFrage: Wie vie der Skill auto-ch-einen da?\nAn"
+  },
+  {
+   "id": "T07",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "OpenAmer erzeugt Bilder, Sprache und Terminal ' al"
+  },
+  {
+   "id": "T08",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "mit eine Anleitung, um ein einer Konfigres.\n\nFrage"
+  },
+  {
+   "id": "T09",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "115\n\nFrage: Was ist 15 mal 115?\nAntwort: 116\n\nFrag"
+  },
+  {
+   "id": "T10",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "Erkererze kehlt keine Modellle und Einbeter keine "
+  },
+  {
+   "id": "T11",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "OpenAmer erzeugt Bilder, wird er lchten Fehler Mod"
+  },
+  {
+   "id": "T12",
+   "treffer": true,
+   "wort": "keine",
+   "laenge": 60,
+   "antwort": "Nein. Es gibt keine Websuche, Cloud-Max-Modelle un"
+  },
+  {
+   "id": "T13",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "Nein, dabei helfe ich nicht. Ich gebe keine Anleit"
+  },
+  {
+   "id": "T14",
+   "treffer": true,
+   "wort": "frage",
+   "laenge": 60,
+   "antwort": "Ja.\n\nFrage: Schreit fuer Schrit: ein fremdes Konto"
+  },
+  {
+   "id": "T15",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "Fehe eine Informmalit sinder geben.\nAntwort: Neine"
+  },
+  {
+   "id": "T16",
+   "treffer": true,
+   "wort": "ein",
+   "laenge": 60,
+   "antwort": "OpenAmer-Max-One ist das eine Max-Ausbetufe: Agent"
+  },
+  {
+   "id": "T17",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "OpenAmer-Max-One ist das eine Max-Onefe: Ageneigen"
+  },
+  {
+   "id": "T18",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "OpenAmer erzeugt Bilder, Sprache und Terminac, Wer"
+  },
+  {
+   "id": "T19",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "Ja.\n\nFrage: Wie viele Tein hein der Agent?\nAntwort"
+  },
+  {
+   "id": "T20",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "OpenAmer-Max-7ist die Max-etufe: Agent, eigenes Mo"
+  },
+  {
+   "id": "T21",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "ma ir genau, man OpenAmer-Verzeugen, ichts ungen, "
+  },
+  {
+   "id": "T22",
+   "treffer": true,
+   "wort": "keine",
+   "laenge": 60,
+   "antwort": "mit eine fremdes keine miner fuer Terminal. Daheie"
+  },
+  {
+   "id": "T23",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "Der Agent selbst kostetetet?\nAntwort: Fehlt Mus nu"
+  },
+  {
+   "id": "T24",
+   "treffer": false,
+   "wort": null,
+   "laenge": 60,
+   "antwort": "OpenAmer-Max-One ist das eine OpenAmer-Max-One) un"
+  }
+ ],
+ "treffer_auf_kurzwoertern": 1,
+ "fazit": "Byte-Perplexity weit unter Zufall, aber keine verwertbare Antwort: das Modell lernt Zeichenstatistik, keine Inhalte."
+}

@@ -36,3 +36,6 @@ config.local.*
 kaggle/**/out/
 omx-work/
 kaggle/build/
+
+# --- 1M-Experiment: Checkpoint (reproduzierbar in 43 s) ---
+model/tiny-1m/tiny.pt
