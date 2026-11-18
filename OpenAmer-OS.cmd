@@ -2,7 +2,9 @@
 REM ============================================================================
 REM  OpenAmer-OS — Startbereit (Windows)
 REM
-REM  Doppelklick = interaktiver Chat mit dem eigenen 7B-Modell auf der GPU.
+REM  Doppelklick = interaktiver Chat mit dem eigenen Modell auf der GPU.
+REM  Modellwahl macht start.sh: openamer-max-vl-8b (8B, Vision) wenn registriert,
+REM  sonst openamer-max-7b. Der Shortcut muss dafuer nicht geaendert werden.
 REM  Mit Argument: OpenAmer-OS.cmd chat -q "..."
 REM
 REM  Ruft IMMER start.sh im Projektordner auf — dort sitzt die Selbstheilung:
@@ -12,7 +14,7 @@ REM    Ollama und Modell werden geprueft und gestartet
 REM ============================================================================
 setlocal EnableExtensions
 chcp 65001 >nul 2>&1
-title OpenAmer-OS — Agent + OpenAmer-Max 7B (GPU)
+title OpenAmer-OS — Agent + OpenAmer-Max 8B-VL (GPU)
 
 set "PROJEKT=/OpenAmer All in One"
 
