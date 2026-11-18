@@ -9,6 +9,14 @@ nicht — sonst weiß am Ende niemand, welche Stufe das Ergebnis verbessert hat.
 (`testset_tasks.json` 24 Fälle, `testset_vision.json` 10 Fälle) mit `--repeat 4`.
 Eine einzelne Zahl ist kein Ergebnis.
 
+> **Nachtrag 18.11.2026 — der Ausgangswert 19/24 ist optimistisch.**
+> 6 der 24 Prüfsatzfragen standen wortgleich im Training. Die alte Schranke
+> verglich nur den gesamten User-Text, Kontext-Zeilen (`Kontext: … Frage: …`)
+> rutschten durch. Der Satz wurde bereinigt (792 → 786 Zeilen), die gleichen
+> Fakten bleiben über anders formulierte Zeilen erhalten. **Ab jetzt gilt:**
+> jeder Vergleichswert wird auf dem bereinigten Satz neu gemessen; der alte
+> 19/24-Wert ist als **Obergrenze** zu lesen.
+
 | # | Etappe | Was entsteht | Schranke (muss grün sein) | Rechner |
 |---|---|---|---|---|
 | 1 | Datenbasis | `max_full_sft.jsonl` aus Grundsatz + Werkzeug + Denk + Bild | 4 Schranken in `tools/build_dataset.py`: Kontamination 0, Prüfwerte 0, Struktur 0, Abdeckung erfüllt | lokal |
