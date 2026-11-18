@@ -41,6 +41,32 @@ GGUF_URL = (f"https://github.com/ggml-org/llama.cpp/releases/download/{LLAMA_TAG
             f"llama-{LLAMA_TAG}-bin-win-cpu-x64.zip")
 MIN_FREI_GB = 45           # Basis 17,5 + GGUF f16 17 + Q4 5 + Luft
 ADAPTER_KANDIDATEN = ("adapter_model.safetensors", "adapter_model.bin")
+PYLIBS = r"C:\Users\amer7\pylibs"
+# Pakete, die der GGUF-Konverter braucht. sentencepiece fehlte am 18.11.2026 und
+# liess die Umwandlung mit ModuleNotFoundError sterben — bei einem unbeaufsichtigten
+# Kettenlauf waere das ein stiller Abbruch.
+PAKETE = {"gguf": "gguf", "sentencepiece": "sentencepiece",
+          "safetensors": "safetensors", "huggingface_hub": "huggingface_hub"}
+
+
+def deps() -> int:
+    """Fehlende Konverter-Pakete nachziehen. Rueckgabe: Anzahl installiert."""
+    fehlend = []
+    for modul, paket in PAKETE.items():
+        try:
+            __import__(modul)
+        except Exception:
+            fehlend.append(paket)
+    if not fehlend:
+        return 0
+    sag(f"installiere fehlende Pakete: {', '.join(fehlend)}")
+    r = lauf([sys.executable, "-m", "pip", "install", "--quiet", "--target", PYLIBS,
+              *fehlend], timeout=1800)
+    if r.returncode != 0:
+        warn(f"Installation fehlgeschlagen: {(r.stderr or '')[-200:]}")
+    if PYLIBS not in sys.path:
+        sys.path.insert(0, PYLIBS)
+    return len(fehlend)
 
 
 def sag(msg: str) -> None:
@@ -176,6 +202,7 @@ def main() -> int:
     if not adapter:
         warn("Kein Adapter gefunden — Training/Auswertung zuerst abschliessen.")
         return 1
+    deps()
     WORK.mkdir(parents=True, exist_ok=True)
     bin_dir = werkzeuge()
     basis = basis_laden()
