@@ -35,33 +35,25 @@ TITLES = {"smoke": "openamer-max-vl-8b-qlora",
           "full": "openamer-max-vl-8b-qlora-full"}
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--mode", choices=("smoke", "full"), default="smoke")
-    ap.add_argument("--epochs", type=int, default=3)
-    ap.add_argument("--steps", type=int, default=25)
-    ap.add_argument("--seq", type=int, default=1024)
-    a = ap.parse_args()
-
+def render(mode: str, epochs: int, steps: int, seq: int) -> tuple[str, dict]:
+    """Quelltext mit ersetzten Defaults + Kernel-Metadaten. Rein, ohne Netzwerk."""
     code = SRC.read_text(encoding="utf-8")
-    # Defaults in der Quelle ersetzen — sonst muesste man zwei Dateien pflegen
-    epochs = a.epochs if a.mode == "full" else 0
-    code = re.sub(r'MAX_STEPS = int\(os\.environ\.get\("OM_STEPS", "\d+"\)\)',
-                  f'MAX_STEPS = int(os.environ.get("OM_STEPS", "{a.steps}"))', code)
-    code = re.sub(r'EPOCHS = float\(os\.environ\.get\("OM_EPOCHS", "[\d.]+"\)\)',
-                  f'EPOCHS = float(os.environ.get("OM_EPOCHS", "{epochs}"))', code)
-    code = re.sub(r'SEQ = int\(os\.environ\.get\("OM_SEQ", "\d+"\)\)',
-                  f'SEQ = int(os.environ.get("OM_SEQ", "{a.seq}"))', code)
-    if f'"{a.steps}"' not in code or f'"{epochs}"' not in code:
-        print("ABBRUCH: Defaults konnten nicht ersetzt werden (Quelle geaendert?)")
-        return 2
-
-    out = BUILD / a.mode
-    out.mkdir(parents=True, exist_ok=True)
-    (out / "train.py").write_text(code, encoding="utf-8")
+    ep = epochs if mode == "full" else 0
+    subs = (
+        (r'MAX_STEPS = int\(os\.environ\.get\("OM_STEPS", "\d+"\)\)',
+         f'MAX_STEPS = int(os.environ.get("OM_STEPS", "{steps}"))', f'"{steps}"'),
+        (r'EPOCHS = float\(os\.environ\.get\("OM_EPOCHS", "[\d.]+"\)\)',
+         f'EPOCHS = float(os.environ.get("OM_EPOCHS", "{ep}"))', f'"{ep}"'),
+        (r'SEQ = int\(os\.environ\.get\("OM_SEQ", "\d+"\)\)',
+         f'SEQ = int(os.environ.get("OM_SEQ", "{seq}"))', f'"{seq}"'),
+    )
+    for pattern, repl, marker in subs:
+        code, n = re.subn(pattern, repl, code)
+        if n != 1 or marker not in code:
+            raise ValueError(f"Default nicht ersetzbar: {pattern}")
     meta = {
-        "id": f"{OWNER}/{SLUGS[a.mode]}",
-        "title": TITLES[a.mode],
+        "id": f"{OWNER}/{SLUGS[mode]}",
+        "title": TITLES[mode],
         "code_file": "train.py",
         "language": "python",
         "kernel_type": "script",
@@ -73,10 +65,30 @@ def main() -> int:
         "kernel_sources": [],
         "model_sources": [],
     }
+    return code, meta
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--mode", choices=("smoke", "full"), default="smoke")
+    ap.add_argument("--epochs", type=int, default=3)
+    ap.add_argument("--steps", type=int, default=25)
+    ap.add_argument("--seq", type=int, default=1024)
+    ap.add_argument("--no-push", action="store_true", help="nur erzeugen, nicht hochladen")
+    a = ap.parse_args()
+
+    code, meta = render(a.mode, a.epochs, a.steps, a.seq)
+    out = BUILD / a.mode
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "train.py").write_text(code, encoding="utf-8")
     (out / "kernel-metadata.json").write_text(json.dumps(meta, indent=1), encoding="utf-8")
 
-    modus = f"{epochs} Epochen" if epochs else f"{a.steps} Schritte"
+    epochs_eff = a.epochs if a.mode == "full" else 0
+    modus = f"{epochs_eff} Epochen" if epochs_eff else f"{a.steps} Schritte"
     print(f"Quelle: {SRC.relative_to(HERE)} -> {out.relative_to(HERE)}  ({modus}, seq {a.seq})")
+    if a.no_push:
+        print("--no-push: nicht hochgeladen")
+        return 0
     api = KaggleApi()
     api.authenticate()
     res = api.kernels_push(str(out))
