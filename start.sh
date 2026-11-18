@@ -17,7 +17,20 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN="$HERE/agent/venv/bin/openamer"
 export OPENAMER_HOME="${OPENAMER_HOME:-$HOME/.openamer}"
-MODELL="${OPENAMER_MODEL:-openamer-max-7b}"
+# Modellwahl: ausdrueckliche Vorgabe > registriertes Modell (Reihenfolge unten) >
+# Standard. Damit uebernimmt das OS ein neu trainiertes Modell automatisch, sobald
+# es in Ollama registriert ist — ohne Aenderung am Shortcut.
+MOD_KANDIDATEN="openamer-max-vl-8b openamer-max-7b"
+modell_aus_ollama() {
+  local tags k
+  tags="$(curl -s --max-time 3 http://127.0.0.1:11434/api/tags 2>/dev/null)" || return 1
+  [ -n "$tags" ] || return 1
+  for k in $MOD_KANDIDATEN; do
+    printf '%s' "$tags" | grep -q "\"$k" && { printf '%s' "$k"; return 0; }
+  done
+  return 1
+}
+MODELL="${OPENAMER_MODEL:-$(modell_aus_ollama || echo openamer-max-7b)}"
 WIN_OPENAMER="/mnt/c/Users/amer7/AppData/Local/openamer"
 AUDIT=0
 [ "${1:-}" = "--audit" ] && AUDIT=1
@@ -123,7 +136,20 @@ else
 fi
 
 # ---------------------------------------------------------------- 5. Modell
-if curl -s --max-time 6 http://127.0.0.1:11434/api/tags 2>/dev/null | grep -q "$MODELL"; then
+# Automatische Uebernahme: ist ein besserer Kandidat registriert, wird er genommen
+# und die Config nachgezogen (Reihenfolge siehe MOD_KANDIDATEN). So landet ein neu
+# trainiertes Modell ohne Handgriff im Shortcut-Start.
+BESSER="$(modell_aus_ollama || true)"
+if [ -n "$BESSER" ] && [ "$BESSER" != "$MODELL" ] && [ -z "${OPENAMER_MODEL:-}" ]; then
+  if [ "$AUDIT" = 1 ]; then
+    warn "besseres Modell registriert: $BESSER (statt $MODELL) — Config wuerde umgestellt"
+  else
+    heil "besseres Modell uebernommen: $MODELL -> $BESSER"
+    "$BIN" config set model.default "$BESSER" >/dev/null 2>&1
+    MODELL="$BESSER"
+  fi
+fi
+if curl -s --max-time 6 http://127.0.0.1:11434/api/tags 2>/dev/null | grep -q "\"$MODELL"; then
   ok "Modell: $MODELL registriert"
 else
   if [ "$AUDIT" = 1 ]; then
