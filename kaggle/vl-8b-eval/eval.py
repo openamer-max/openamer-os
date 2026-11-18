@@ -62,6 +62,19 @@ def find_adapter() -> Path | None:
     return None
 
 
+def passe(antwort: str, muss: list) -> tuple[bool, str | None]:
+    """Projektbewertung: ein "muss"-Feld ist eine ODER-Liste, Gross/Klein egal.
+
+    Modul-Ebene statt in main(), damit die Bewertung ohne GPU pruefbar ist —
+    eine Bewertung, die nur im Kernel laeuft, kann still falsch sein.
+    """
+    a = (antwort or "").lower()
+    for w in muss or []:
+        if str(w).strip().lower() in a:
+            return True, str(w)
+    return False, None
+
+
 def main() -> int:
     t0 = time.time()
     deps()
@@ -98,13 +111,6 @@ def main() -> int:
                              temperature=None, top_p=None)
         neu = ids[0][enc["input_ids"].shape[1]:]
         return proc.tokenizer.decode(neu, skip_special_tokens=True).strip()
-
-    def passe(antwort: str, muss: list) -> tuple[bool, str | None]:
-        a = antwort.lower()
-        for w in muss:
-            if str(w).strip().lower() in a:
-                return True, str(w)
-        return False, None
 
     ergebnis = {"modell": MODEL_ID, "adapter": str(adapter) if adapter else None,
                 "pruefungen": {}}
