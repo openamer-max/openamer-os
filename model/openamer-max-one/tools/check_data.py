@@ -13,8 +13,10 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import re
 import subprocess
 import sys
+from datetime import date
 from pathlib import Path
 
 EXP = Path(__file__).resolve().parent.parent
@@ -103,6 +105,57 @@ rec("Neubau unveraendert (Hash)", h0 == h1, h1)
 print("\n[5] Repo")
 g = subprocess.run(["git", "status", "--porcelain"], cwd=REPO, capture_output=True, text=True)
 rec("Arbeitsbaum sauber", g.stdout.strip() == "", g.stdout.strip()[:70] or "leer")
+
+print("\n[6] Denk-Spuren: Rechnung unabhaengig nachgerechnet")
+# Form allein reicht nicht: ein Satz mit falscher Rechnung bringt dem Modell
+# falsches Denken bei. Jede Fallfamilie wird hier neu berechnet.
+G = load(EXP / "datagen_full.py", "fullgen")
+FAKTOR = {("km", "m"): 1000, ("kg", "g"): 1000, ("min", "s"): 60,
+          ("h", "min"): 60, ("l", "ml"): 1000}
+faelle = G._rechenfaelle()
+fehler: list[str] = []
+zaehler: dict[str, int] = {}
+
+for frage, schritte, antwort in faelle:
+    if m := re.search(r"Wie viele (\w+) sind (\d+) (\w+)\?", frage):
+        nach, wert, von = m.group(1), int(m.group(2)), m.group(3)
+        soll, art = wert * FAKTOR[(von, nach)], "einheiten"
+        ist = int(re.search(r"sind (\d+) ", antwort).group(1))
+    elif m := re.search(r"Wie viel sind (\d+) Grad Celsius", frage):
+        c, art = int(m.group(1)), "temperatur"
+        soll = c * 9 / 5 + 32
+        ist = float(re.search(r"sind ([\d.]+) Grad Fahrenheit", antwort).group(1))
+    elif m := re.search(r"zwischen (\d+)\.(\d+)\.(\d+) und (\d+)\.(\d+)\.(\d+)", frage):
+        a, b, c2, d, e, f = (int(m.group(i)) for i in range(1, 7))
+        art = "datum"
+        soll = (date(f, e, d) - date(c2, b, a)).days
+        ist = int(re.search(r"Es sind (\d+) Tage", antwort).group(1))
+    elif m := re.search(r"(\d+) cm lang und (\d+) cm breit", frage):
+        laenge, breite, art = int(m.group(1)), int(m.group(2)), "rechteck"
+        soll = (laenge * breite, 2 * (laenge + breite))
+        ist = (int(re.search(r"Flaeche (\d+) cm2", antwort).group(1)),
+               int(re.search(r"Umfang (\d+) cm", antwort).group(1)))
+    elif m := re.search(r"Kapital von (\d+) bei ([\d.]+) % in (\d+) Jahren", frage):
+        k, p, j, art = float(m.group(1)), float(m.group(2)), int(m.group(3)), "zins"
+        soll = k * p / 100 * j
+        ist = float(re.search(r"betraegt ([\d.]+)", antwort).group(1))
+    elif m := re.search(r"kostet (\d+) Euro, es gibt (\d+) % Rabatt", frage):
+        preis, rabatt, art = int(m.group(1)), int(m.group(2)), "rabatt"
+        soll = preis * (100 - rabatt) / 100
+        ist = float(re.search(r"danach ([\d.]+) Euro", antwort).group(1))
+    else:
+        continue
+    zaehler[art] = zaehler.get(art, 0) + 1
+    if soll != ist:
+        fehler.append(f"{art}: {ist} statt {soll}")
+
+for art in ("einheiten", "temperatur", "datum", "rechteck", "zins", "rabatt"):
+    rec(f"{art} gerechnet", zaehler.get(art, 0) > 0, f"{zaehler.get(art, 0)} Faelle")
+rec("keine Rechenfehler", not fehler, "; ".join(fehler[:3]))
+rec("jeder Fall >=2 Schritte", all(len(s) >= 2 for _f, s, _a in faelle))
+verboten = G.pruefsatz_fragen()
+rec("keine Pruefsatzfrage aus dem Generator",
+    not any(f.strip().lower() in verboten for f, _s, _a in faelle))
 
 bad = [x for x in res if not x[1]]
 print("\n" + "=" * 62)
