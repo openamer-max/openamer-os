@@ -232,9 +232,13 @@ def collate_batch(batch: list[dict], pad_id: int):
             torch.nn.functional.pad(x["mm_token_type_ids"],
                                     (0, mx - x["mm_token_type_ids"].shape[0]), value=0)
             for x in batch])
+    # Nur die vorhandenen Bild-Felder zusammenfuehren. Frueher stand hier
+    # all(v is not None ...): lag EIN Text-Beispiel im Batch, fielen die Bilder
+    # fuer den ganzen Batch weg — bei batch_size=1 unsichtbar, sonst stiller
+    # Datenverlust (am 18.11.2026 im Misch-Batch-Test aufgefallen).
     for key in ("pixel_values", "image_grid_thw"):
-        vals = [x.get(key) for x in batch]
-        if all(v is not None for v in vals):
+        vals = [x[key] for x in batch if x.get(key) is not None]
+        if vals:
             out[key] = torch.cat(vals, dim=0)
     return out
 
