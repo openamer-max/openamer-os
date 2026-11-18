@@ -126,17 +126,31 @@ def preflight() -> int:
 def werkzeuge() -> Path:
     """llama.cpp-Binaries holen (CPU reicht fuer Konvertieren/Mergen/Quantisieren)."""
     da = list(LC.glob("**/llama-quantize.exe"))
-    if da:
-        return da[0].parent
-    LC.mkdir(parents=True, exist_ok=True)
-    zip_datei = LC / "llama-cpp.zip"
-    sag(f"lade llama.cpp {LLAMA_TAG} ...")
-    urllib.request.urlretrieve(GGUF_URL, zip_datei)
-    shutil.unpack_archive(str(zip_datei), str(LC))
-    treffer = list(LC.glob("**/llama-quantize.exe"))
-    if not treffer:
-        raise RuntimeError("llama-quantize.exe nicht im Archiv")
-    return treffer[0].parent
+    if not da:
+        LC.mkdir(parents=True, exist_ok=True)
+        zip_datei = LC / "llama-cpp.zip"
+        sag(f"lade llama.cpp {LLAMA_TAG} ...")
+        urllib.request.urlretrieve(GGUF_URL, zip_datei)
+        shutil.unpack_archive(str(zip_datei), str(LC))
+        da = list(LC.glob("**/llama-quantize.exe"))
+        if not da:
+            raise RuntimeError("llama-quantize.exe nicht im Archiv")
+    repo_laden()
+    return da[0].parent
+
+
+def repo_laden() -> Path:
+    """Konverter-Repo. Die Binaries enthalten convert_hf_to_gguf.py NICHT —
+    am 18.11.2026 mit NotADirectoryError aufgefallen."""
+    repo = LC / "llama.cpp"
+    if (repo / "convert_hf_to_gguf.py").is_file():
+        return repo
+    sag("hole Konverter-Repo (flach) ...")
+    r = lauf(["git", "clone", "--depth", "1",
+              "https://github.com/ggml-org/llama.cpp.git", str(repo)], timeout=1800)
+    if r.returncode != 0:
+        raise RuntimeError(f"git clone fehlgeschlagen: {(r.stderr or '')[-200:]}")
+    return repo
 
 
 def basis_laden() -> Path:
@@ -166,34 +180,31 @@ def main() -> int:
     bin_dir = werkzeuge()
     basis = basis_laden()
 
-    sag("1/4 Basis nach GGUF (f16) ...")
-    basis_gguf = WORK / "base-f16.gguf"
-    if not basis_gguf.is_file():
-        r = lauf([sys.executable, "convert_hf_to_gguf.py", str(basis),
-                  "--outfile", str(basis_gguf), "--outtype", "f16"],
-                 cwd=str(LC / "llama.cpp"))
+    repo = repo_laden()
+    # llama-export-lora gibt es im CPU-Build nicht, und ein Merge im Speicher
+    # braucht ~20 GB RAM (nur 17 frei). Deshalb stromweise auf der Platte.
+    sag("1/4 Adapter stromweise in die Basis rechnen ...")
+    gemerged = WORK / "merged"
+    if not (gemerged / "model.safetensors.index.json").is_file():
+        r = lauf([sys.executable, str(REPO / "tools" / "merge_lora_stream.py"),
+                  str(basis), str(adapter), str(gemerged)], timeout=7200)
+        if r.returncode != 0:
+            warn(f"Merge fehlgeschlagen: {(r.stderr or r.stdout or '')[-300:]}")
+            return 2
+    ok(f"gemergt: {gemerged}")
+
+    sag("2/4 gemergte Basis nach GGUF (f16) ...")
+    zusammengefuehrt = WORK / "merged-f16.gguf"
+    if not zusammengefuehrt.is_file():
+        r = lauf([sys.executable, str(repo / "convert_hf_to_gguf.py"), str(gemerged),
+                  "--outfile", str(zusammengefuehrt), "--outtype", "f16"],
+                 cwd=str(repo), timeout=7200)
         if r.returncode != 0:
             warn(f"Konvertierung fehlgeschlagen: {(r.stderr or '')[-300:]}")
             return 2
-    ok(f"Basis-GGUF: {basis_gguf.stat().st_size / 2**30:.1f} GB")
+    ok(f"GGUF f16: {zusammengefuehrt.stat().st_size / 2**30:.1f} GB")
 
-    sag("2/4 Adapter nach GGUF-LoRA ...")
-    lora_gguf = WORK / "adapter-lora.gguf"
-    if not lora_gguf.is_file():
-        r = lauf([sys.executable, str(LC / "llama.cpp" / "convert_lora_to_gguf.py"),
-                  "--base", str(basis), "--outfile", str(lora_gguf), str(adapter)])
-        if r.returncode != 0:
-            warn(f"LoRA-Konvertierung fehlgeschlagen: {(r.stderr or '')[-300:]}")
-            return 2
-
-    sag("3/4 zusammenrechnen und quantisieren ...")
-    zusammengefuehrt = WORK / "merged-f16.gguf"
-    if not zusammengefuehrt.is_file():
-        r = lauf([str(bin_dir / "llama-export-lora.exe"), "-m", str(basis_gguf),
-                  "-o", str(zusammengefuehrt), "--lora", str(lora_gguf)])
-        if r.returncode != 0:
-            warn(f"Mergen fehlgeschlagen: {(r.stderr or '')[-300:]}")
-            return 2
+    sag("3/4 quantisieren ...")
     q4 = WORK / f"{NAME}-Q4_K_M.gguf"
     if not q4.is_file():
         r = lauf([str(bin_dir / "llama-quantize.exe"), str(zusammengefuehrt), str(q4), "Q4_K_M"])
