@@ -22,6 +22,11 @@ api = KaggleApi()
 api.authenticate()
 
 
+def aktiv(stati: dict[str, str]) -> int:
+    """Wie viele GPU-Sitzungen belegen einen Platz? (Kaggle erlaubt 2.)"""
+    return sum(1 for v in stati.values() if v in ACTIVE)
+
+
 def stati() -> dict[str, str]:
     out = {}
     for r in REFS:
@@ -36,9 +41,9 @@ print(f"[{time.strftime('%H:%M:%S')}] warte auf freien GPU-Platz ...", flush=Tru
 frei = False
 for _ in range(120):                      # max. 60 Minuten
     s = stati()
-    aktiv = sum(1 for v in s.values() if v in ACTIVE)
-    print(f"[{time.strftime('%H:%M:%S')}] aktiv={aktiv} {json.dumps(s)}", flush=True)
-    if aktiv < 2:
+    belegt = aktiv(s)
+    print(f"[{time.strftime('%H:%M:%S')}] aktiv={belegt} {json.dumps(s)}", flush=True)
+    if belegt < 2:
         frei = True
         break
     time.sleep(30)
