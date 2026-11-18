@@ -115,14 +115,27 @@ def main() -> int:
 
     # --- Schranke 1: Kontamination (Frage-Wortlaut)
     fragen, vision_werte, task_werte = testset_texts()
-    leaks = [r for r in rows if not r.get("image")
-             and r["messages"][0].get("content", "").strip().lower() in fragen]
+
+    def frage_teil(user: str) -> str:
+        """Frageteil einer Zeile. Kontext-Zeilen tragen 'Frage: ...' hinten dran."""
+        u = (user or "").strip().lower()
+        return u.split("frage:", 1)[1].strip() if "frage:" in u else u
+
+    # Frueher wurde nur der GANZE User-Text verglichen — dadurch rutschten
+    # Kontext-Zeilen durch, die die Pruefsatzfrage im Frageteil woertlich
+    # enthielten (6 von 24 Faellen, am 18.11.2026 gemessen). Solche Paare
+    # messen Auswendiglernen, nicht Koennen: sie fliegen raus, und zwar sichtbar.
+    behalten, leaks = [], []
+    for r in rows:
+        (leaks if frage_teil(r["messages"][0].get("content", "")) in fragen
+         else behalten).append(r)
+    rows = behalten
+    kinds = Counter(r.get("kind", "?") for r in rows)
     print(f"\n=== Schranke 1: Kontamination ===")
-    print(f"  Pruefsatz-Fragen woertlich im Training: {len(leaks)} (muss 0 sein)")
-    if leaks:
-        fails.append(f"{len(leaks)} Pruefsatz-Fragen im Training")
-        for r in leaks[:3]:
-            print("    ", r["messages"][0]["content"][:70])
+    print(f"  wortgleiche Pruefsatzfragen entfernt: {len(leaks)} "
+          f"({len(rows)} Zeilen bleiben)")
+    for r in leaks:
+        print("    -", r.get("kind"), "|", r["messages"][0]["content"][:64].replace("\n", " "))
 
     # --- Schranke 2: Pruefsatz-Werte in Bild-Zeilen (auswendig lernen verhindern)
     vision_blob = " ".join(r["messages"][0]["content"] + " " + r["messages"][1]["content"]
