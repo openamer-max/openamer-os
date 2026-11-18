@@ -19,9 +19,13 @@ from pathlib import Path
 from kaggle.api.kaggle_api_extended import KaggleApi
 
 KAGGLE = Path(__file__).resolve().parent
+REPO = KAGGLE.parent
 OUT = Path(r"C:\Users\amer7\omx-kaggle")
 TRAIN = "amersacirovic/openamer-max-vl-8b-qlora-full"
 EVAL = "amersacirovic/openamer-max-vl-8b-eval"
+KANDIDAT = "openamer-max-vl-8b-kandidat"     # Bauname: nicht in start.sh
+ZIEL_NAME = "openamer-max-vl-8b"             # dieser Name wird Standard
+BASIS_MODELL = "openamer-max-7b"             # laufender Standard
 TERMINAL = {"COMPLETE", "ERROR", "CANCELED", "CANCEL_ACKNOWLEDGED"}
 
 api = KaggleApi()
@@ -53,6 +57,41 @@ def hole(ref: str) -> Path:
     except Exception as exc:
         print(f"  Ausgabe nicht abholbar: {type(exc).__name__} {exc}", flush=True)
     return ziel
+
+
+def baue_und_entscheide(adapter: Path) -> bool:
+    """Adapter zu Ollama-Modell bauen und nur bei besserem Ergebnis uebernehmen.
+
+    Der Kandidat bekommt bewusst einen eigenen Namen: ein Modell, das auf dem
+    Pruefsatz schlechter ist als das laufende, darf nicht Standard werden
+    (gemessen 18.11.2026: 8B mit 25-Schritt-Adapter 18/24 gegen 7B 22/24).
+    """
+    env = {**os.environ, "PYTHONPATH": r"C:\Users\amer7\pylibs",
+           "OMX_8B_NAME": KANDIDAT, "OMX_8B_ADAPTER": str(adapter)}
+    print(f"\n=== 4. Modell bauen ({KANDIDAT}) ===", flush=True)
+    p = subprocess.run([sys.executable, str(REPO / "tools" / "integrate_8b.py")],
+                       cwd=str(REPO), capture_output=True, text=True, env=env, timeout=14400)
+    print(((p.stdout or "") + (p.stderr or "")).strip()[-600:], flush=True)
+    if p.returncode != 0:
+        print("ABBRUCH: Bau fehlgeschlagen", flush=True)
+        return False
+
+    print("\n=== 5. Uebernahme messen ===", flush=True)
+    v = subprocess.run([sys.executable, str(REPO / "tools" / "vergleich.py"),
+                        "--neu", KANDIDAT, "--alt", BASIS_MODELL],
+                       cwd=str(REPO), capture_output=True, text=True,
+                       env={**os.environ, "PYTHONPATH": r"C:\Users\amer7\pylibs"}, timeout=7200)
+    print(((v.stdout or "") + (v.stderr or "")).strip()[-400:], flush=True)
+    if v.returncode != 0:
+        print(f"ENTSCHEID: {KANDIDAT} ist nicht besser — {BASIS_MODELL} bleibt Standard", flush=True)
+        return False
+
+    print(f"ENTSCHEID: {KANDIDAT} ist besser — wird als {ZIEL_NAME} uebernommen", flush=True)
+    for cmd in (["ollama", "rm", ZIEL_NAME], ["ollama", "cp", KANDIDAT, ZIEL_NAME]):
+        subprocess.run(cmd, capture_output=True, text=True, timeout=1200)
+    liste = subprocess.run(["ollama", "list"], capture_output=True, text=True).stdout
+    print(f"  -> {ZIEL_NAME} registriert: {ZIEL_NAME in liste}", flush=True)
+    return ZIEL_NAME in liste
 
 
 def main() -> int:
@@ -99,6 +138,13 @@ def main() -> int:
         break
     else:
         print("  kein results.json im Ergebnis", flush=True)
+
+    adapter = next((q.parent for q in ziel.rglob("adapter_config.json")), None)
+    if s == "COMPLETE" and adapter:
+        baue_und_entscheide(adapter)
+    elif s == "COMPLETE":
+        print("  kein Adapter in der Ausgabe — kein Bau", flush=True)
+
     print(f"\nENDE: Auswertung {s}", flush=True)
     return 0 if s == "COMPLETE" else 1
 
