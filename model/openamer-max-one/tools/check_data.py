@@ -87,6 +87,20 @@ fragen = {frageteil_user for p in ("testset_vision.json", "testset_tasks.json")
 rec("keine wortgleiche Pruefsatzfrage im Training",
     not [r for r in sft if frageteil(r["messages"][0]["content"]) in fragen])
 
+# Vision-Sollwerte, die wie Zahlen/Hashes aussehen (Version, Commit, Fehlercode),
+# duerfen in KEINER Zeile stehen: sonst antwortet das Modell aus dem Gedaechtnis,
+# ohne das Bild zu lesen — der Bild-Pruefsatz misst dann nichts. Allgemeine Woerter
+# ("config.yaml", "erfolgreich") sind dagegen Fakten bzw. normaler Sprachgebrauch
+# und werden nur berichtet.
+dynamisch = [v for v in VISION_WERTE
+             if re.match(r"^\d", v) or re.fullmatch(r"[0-9a-f]{6,}", v)]
+sft_blob = json.dumps(sft, ensure_ascii=False).lower()
+rec("keine Zahlen-/Hash-Sollwerte im Gesamtkorpus",
+    not [v for v in dynamisch if v in sft_blob],
+    f"{len(dynamisch)} solche Werte")
+rest = sorted(v for v in VISION_WERTE if v in sft_blob and v not in dynamisch)
+print(f"        (Info) allgemeine Vision-Woerter im Korpus: {rest or 'keine'}")
+
 print("\n[3] Bilder")
 imgs = sorted(IMGDIR.glob("*.png"))
 rec(f">= {MIN_BILDER} Bilddateien", len(imgs) >= MIN_BILDER, str(len(imgs)))

@@ -130,49 +130,20 @@ def serialize_tool_row(row: dict) -> tuple[str, str] | None:
     return user, antwort
 
 
-def build_example(proc, row: dict, base: Path, max_len: int) -> dict | None:
-    """(input_ids, attention_mask, labels, pixel_values...) fuer eine Zeile.
-
-    Ziel ist immer die letzte Assistant-Antwort; alles davor wird maskiert (-100).
-    Nur Zeilen mit genau einer Frage und einer Antwort werden hier verwendet —
-    Werkzeug-Zeilen folgen im naechsten Schritt (eigenes Format).
-    """
-    from PIL import Image
-
-    msgs = row.get("messages") or []
-    if len(msgs) == 2 and msgs[0].get("role") == "user" and msgs[1].get("role") == "assistant":
-        frage, antwort = msgs[0]["content"], msgs[1]["content"]
-    else:
-        paar = serialize_tool_row(row)
-        if paar is None:
-            return None
-        frage, antwort = paar
-    if not (frage or "").strip() or not (antwort or "").strip():
-        return None
-
-    images = []
-    if row.get("image"):
-        p = base / row["image"]
-        if not p.is_file():
-            return None
-        images.append(Image.open(p).convert("RGB"))
-
-    content = []
-    if images:
-        content.append({"type": "image"})
-    content.append({"type": "text", "text": frage})
-    prompt = proc.apply_chat_template(
-        [{"role": "user", "content": content}],
-        tokenize=False, add_generation_prompt=True)
-    full = prompt + antwort + (proc.tokenizer.eos_token or "")
-
+def _encode(proc, prompt: str, full: str, images: list, max_len: int) -> dict:
+    """Tokenisiert Prompt und Ziel; maskiert alles bis zum Ziel (-100)."""
     enc = proc(text=[full], images=images or None, return_tensors="pt",
                padding=False, truncation=True, max_length=max_len)
     pre = proc(text=[prompt], images=images or None, return_tensors="pt",
                padding=False, truncation=True, max_length=max_len)
     labels = enc["input_ids"].clone()
-    cut = pre["input_ids"].shape[1]
+    cut = min(pre["input_ids"].shape[1], labels.shape[1])
     labels[:, :cut] = -100
+    return _felder(enc, labels)
+
+
+def _felder(enc, labels) -> dict:
+    """Nur die TOKEN-Felder haben eine fuehrende Batch-Dimension (1, L)."""
     # Nur die TOKEN-Felder haben eine fuehrende Batch-Dimension (1, L) und
     # brauchen v[0]. Die Bild-Felder NICHT anfassen — gemessene Rohformen:
     #   pixel_values   (744, 1536)   744 Patches x 1536 Dimensionen
@@ -191,21 +162,76 @@ def build_example(proc, row: dict, base: Path, max_len: int) -> dict | None:
     return out
 
 
+def build_examples(proc, row: dict, base: Path, max_len: int) -> list[dict]:
+    """Ein oder zwei Trainingsbeispiele fuer eine Zeile.
+
+    Einfache Zeilen ergeben eins (Frage -> Antwort). Werkzeug-Zeilen ergeben ZWEI,
+    weil beides gelernt werden muss:
+      A) den Aufruf erzeugen            (Frage -> <tool_call>...</tool_call>)
+      B) nach dem Ergebnis antworten    (Frage+Aufruf+<tool_response> -> Antwort)
+    Die Qwen-Vorlage rendert dafuer nativ <tool_call> und <tool_response>; am
+    18.11.2026 am Processor geprueft. Vorher wurde das Werkzeug-Format als Fliesstext
+    gelehrt ("Werkzeug: ... Ergebnis: ...") — das lernt Muster, keine Schnittstelle.
+    """
+    from PIL import Image
+
+    msgs = row.get("messages") or []
+    images = []
+    if row.get("image"):
+        p = base / row["image"]
+        if not p.is_file():
+            return []
+        images.append(Image.open(p).convert("RGB"))
+
+    def rendern(teil: list[dict], gen: bool) -> str:
+        ms = [dict(m) for m in teil]
+        if images and ms and ms[0].get("role") == "user":
+            ms[0]["content"] = [{"type": "image"},
+                               {"type": "text", "text": ms[0].get("content") or ""}]
+        return proc.apply_chat_template(ms, tokenize=False, add_generation_prompt=gen)
+
+    eos = proc.tokenizer.eos_token or ""
+    hat_call = any(m.get("tool_calls") for m in msgs)
+
+    if not hat_call:
+        if len(msgs) == 2 and msgs[1].get("role") == "assistant" and (msgs[1].get("content") or "").strip():
+            prompt = rendern(msgs[:1], True)
+            return [_encode(proc, prompt, rendern(msgs, False) + eos, images, max_len)]
+        paar = serialize_tool_row(row)         # Altform als Rueckfall
+        if paar is None:
+            return []
+        frage, antwort = paar
+        prompt = rendern([{"role": "user", "content": frage}], True)
+        return [_encode(proc, prompt, prompt + antwort + eos, images, max_len)]
+
+    i_call = next(i for i, m in enumerate(msgs) if m.get("tool_calls"))
+    out = [_encode(proc, rendern(msgs[:i_call], True),
+                   rendern(msgs[:i_call + 1], False) + eos, images, max_len)]
+    if len(msgs) > i_call + 2 and msgs[-1].get("role") == "assistant" \
+            and (msgs[-1].get("content") or "").strip():
+        out.append(_encode(proc, rendern(msgs[:-1], True),
+                           rendern(msgs, False) + eos, images, max_len))
+    return out
+
+
 def build_dataset(proc, rows: list[dict], base: Path, max_len: int) -> tuple[list[dict], dict]:
-    built, stats = [], {"text": 0, "vision": 0, "verworfen": 0, "fehler": 0}
+    built, stats = [], {"text": 0, "vision": 0, "werkzeug": 0, "verworfen": 0, "fehler": 0}
     for r in rows:
         try:
-            ex = build_example(proc, r, base, max_len)
+            exs = build_examples(proc, r, base, max_len)
         except Exception:
             stats["fehler"] += 1
             if stats["fehler"] <= 2:
                 traceback.print_exc()
             continue
-        if ex is None:
+        if not exs:
             stats["verworfen"] += 1
             continue
-        built.append(ex)
-        stats["vision" if r.get("image") else "text"] += 1
+        built.extend(exs)
+        if any(m.get("tool_calls") for m in (r.get("messages") or [])):
+            stats["werkzeug"] += len(exs)
+        else:
+            stats["vision" if r.get("image") else "text"] += len(exs)
     if VISION_FIRST:
         built.sort(key=lambda ex: 0 if ex.get("pixel_values") is not None else 1)
         log("Reihenfolge: Bild-Beispiele zuerst (OM_VISION_FIRST=1)")

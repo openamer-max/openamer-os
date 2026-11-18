@@ -55,8 +55,8 @@ def qa(kind: str, frage: str, antwort: str) -> dict:
 TOOL_CASES = [
     # terminal
     ("Nenne mir die Python-Version auf diesem Rechner.", "terminal",
-     {"command": "python --version"}, "Python 3.11.17",
-     "Auf diesem Rechner laeuft Python 3.11.17."),
+     {"command": "python --version"}, "Python 3.12.4",
+     "Auf diesem Rechner laeuft Python 3.12.4."),
     ("Wie viel freier Speicher ist auf C:?", "terminal",
      {"command": "df -h /c"}, "Dateisystem C: 268G frei von 500G",
      "Auf C: sind 268 GB frei."),
