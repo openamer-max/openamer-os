@@ -68,26 +68,39 @@ def hole(ref: str) -> None:
     print("  kein report.json im Ergebnis", flush=True)
 
 
-print("=== 1. Smoke bis Ende ===", flush=True)
-s = warte(SMOKE)
-hole(SMOKE)
-if not weiter(s):
-    print(f"ABBRUCH: Smoke endete mit {s} — kein Full-Lauf gestartet", flush=True)
-    sys.exit(1)
+def push_full(epochs: int = 3, versuche: int = 10) -> bool:
+    """Echten Lauf starten; wiederholen, solange kein GPU-Platz frei ist."""
+    for i in range(versuche):
+        p = subprocess.run([sys.executable, str(KAGGLE / "push_run.py"), "--mode", "full",
+                            "--epochs", str(epochs)], cwd=str(KAGGLE), capture_output=True,
+                           text=True, env={**os.environ, "PYTHONPATH": r"C:\Users\amer7\pylibs"},
+                           timeout=600)
+        out = (p.stdout or "") + (p.stderr or "")
+        print(f"  Versuch {i + 1}: {out.strip().splitlines()[-1][:160]}", flush=True)
+        if '"error": null' in out:
+            return True
+        time.sleep(60)
+    return False
 
-print("\n=== 2. Full-Lauf starten ===", flush=True)
-for versuch in range(10):
-    p = subprocess.run([sys.executable, str(KAGGLE / "push_run.py"), "--mode", "full",
-                        "--epochs", "3"], cwd=str(KAGGLE), capture_output=True, text=True,
-                       env={**os.environ, "PYTHONPATH": r"C:\Users\amer7\pylibs"}, timeout=600)
-    out = (p.stdout or "") + (p.stderr or "")
-    print(f"  Versuch {versuch + 1}: {out.strip().splitlines()[-1][:160]}", flush=True)
-    if '"error": null' in out:
-        break
-    time.sleep(60)
 
-print("\n=== 3. Full bis Ende ===", flush=True)
-s = warte(FULL, max_min=300)          # 3 Epochen: bis 5 Stunden
-hole(FULL)
-print(f"\nENDE: Smoke+Full durch, Full-Status {s}", flush=True)
-sys.exit(0 if s == "COMPLETE" else 1)
+def main(epochs: int = 3) -> int:
+    print("=== 1. Smoke bis Ende ===", flush=True)
+    s = warte(SMOKE)
+    hole(SMOKE)
+    if not weiter(s):
+        print(f"ABBRUCH: Smoke endete mit {s} — kein Full-Lauf gestartet", flush=True)
+        return 1
+    print("\n=== 2. Full-Lauf starten ===", flush=True)
+    if not push_full(epochs):
+        print("ABBRUCH: kein GPU-Platz fuer den Full-Lauf", flush=True)
+        return 1
+    print("\n=== 3. Full bis Ende ===", flush=True)
+    s = warte(FULL, max_min=300)
+    hole(FULL)
+    print(f"\nENDE: Smoke+Full durch, Full-Status {s}", flush=True)
+    return 0 if s == "COMPLETE" else 1
+
+
+if __name__ == "__main__":
+    epochen = int(sys.argv[1]) if len(sys.argv) > 1 else 3
+    sys.exit(main(epochen))
