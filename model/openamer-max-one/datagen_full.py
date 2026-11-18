@@ -188,6 +188,66 @@ def _rechenfaelle() -> list[tuple[str, list[str], str]]:
                     f"Das sind {h} Stunden."]
         faelle.append((f"Ich fahre {km} km mit {tempo} km/h. Wie lange dauert das?",
                        schritte, f"Das dauert {h} Stunden."))
+
+    # Einheiten umrechnen — Faktor wird gerechnet, nicht behauptet
+    for wert, von, nach, faktor in [(3, "km", "m", 1000), (2, "kg", "g", 1000),
+                                    (90, "min", "s", 60), (4, "h", "min", 60),
+                                    (2, "l", "ml", 1000)]:
+        ergebnis = wert * faktor
+        schritte = [f"1 {von} sind {faktor} {nach}.",
+                    f"{wert} x {faktor} = {ergebnis}."]
+        faelle.append((f"Wie viele {nach} sind {wert} {von}?",
+                       schritte, f"{wert} {von} sind {ergebnis} {nach}."))
+
+    # Grad Celsius in Fahrenheit
+    for c in [0, 21, 37, 100]:
+        f = c * 9 / 5 + 32
+        schritte = [f"Formel: F = C x 9/5 + 32.",
+                    f"{c} x 9/5 = {c * 9 / 5:g}.",
+                    f"{c * 9 / 5:g} + 32 = {f:g}."]
+        faelle.append((f"Wie viel sind {c} Grad Celsius in Fahrenheit?",
+                       schritte, f"{c} Grad Celsius sind {f:g} Grad Fahrenheit."))
+
+    # Tage zwischen zwei Daten
+    for d1, d2 in [((2026, 1, 10), (2026, 3, 15)), ((2026, 6, 1), (2026, 6, 30)),
+                   ((2025, 12, 20), (2026, 1, 5))]:
+        from datetime import date
+        tage = (date(*d2) - date(*d1)).days
+        schritte = [f"Erstes Datum: {d1[2]}.{d1[1]}.{d1[0]}.",
+                    f"Zweites Datum: {d2[2]}.{d2[1]}.{d2[0]}.",
+                    f"Differenz in Tagen: {tage}."]
+        faelle.append((f"Wie viele Tage liegen zwischen {d1[2]}.{d1[1]}.{d1[0]} "
+                       f"und {d2[2]}.{d2[1]}.{d2[0]}?",
+                       schritte, f"Es sind {tage} Tage."))
+
+    # Rechteck: Flaeche und Umfang
+    for laenge, breite in [(7, 4), (12, 5), (3, 9)]:
+        flaeche, umfang = laenge * breite, 2 * (laenge + breite)
+        schritte = [f"Flaeche = Laenge x Breite = {laenge} x {breite} = {flaeche}.",
+                    f"Umfang = 2 x (Laenge + Breite) = 2 x ({laenge} + {breite}) "
+                    f"= {umfang}."]
+        faelle.append((f"Ein Rechteck ist {laenge} cm lang und {breite} cm breit. "
+                       f"Wie gross sind Flaeche und Umfang?",
+                       schritte, f"Flaeche {flaeche} cm2, Umfang {umfang} cm."))
+
+    # Zinsrechnung (einfach)
+    for kapital, prozent, jahre in [(1000, 3, 2), (2500, 1.5, 4), (800, 5, 3)]:
+        zins = kapital * prozent / 100 * jahre
+        schritte = [f"Zins = Kapital x Zinssatz x Jahre.",
+                    f"{kapital} x {prozent}/100 = {kapital * prozent / 100:g} pro Jahr.",
+                    f"{kapital * prozent / 100:g} x {jahre} = {zins:g}."]
+        faelle.append((f"Wie viel Zins bringt ein Kapital von {kapital} bei {prozent} % "
+                       f"in {jahre} Jahren?",
+                       schritte, f"Der Zins betraegt {zins:g}."))
+
+    # Rabatt
+    for preis, rabatt in [(240, 15), (89, 20), (1250, 10)]:
+        neu = preis * (100 - rabatt) / 100
+        schritte = [f"Rabatt in Geld: {preis} x {rabatt}/100 = {preis * rabatt / 100:g}.",
+                    f"Neuer Preis: {preis} - {preis * rabatt / 100:g} = {neu:g}."]
+        faelle.append((f"Ein Artikel kostet {preis} Euro, es gibt {rabatt} % Rabatt. "
+                       f"Was kostet er danach?",
+                       schritte, f"Er kostet danach {neu:g} Euro."))
     return faelle
 
 
