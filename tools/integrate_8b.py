@@ -225,6 +225,18 @@ def basis_laden() -> Path:
     return ziel
 
 
+def system_block() -> str:
+    """SYSTEM-Block aus Modelfile.max-7b (Quelle statt Kopie)."""
+    quelle = REPO / "model" / "openamer-max-one" / "Modelfile.max-7b"
+    if not quelle.is_file():
+        return ""
+    text = quelle.read_text(encoding="utf-8", errors="replace")
+    treffer = __import__("re").search(r'SYSTEM\s+"""(.*?)"""', text, __import__("re").S)
+    if not treffer:
+        return ""
+    return f'SYSTEM """{treffer.group(1).strip()}"""\n'
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--preflight", action="store_true")
@@ -277,11 +289,14 @@ def main() -> int:
 
     sag("4/4 in Ollama registrieren ...")
     modelfile = WORK / "Modelfile"
+    # Systemprompt aus dem 7B-Modelfile uebernehmen: ohne ihn antwortet das Modell
+    # am Thema vorbei und der Vergleich mit dem 7B waere unfair (Fund 19.11.2026).
     modelfile.write_text(
         f"FROM {q4}\n\n"
         f"# 8B-VL braucht weniger Kontext als das 7B: 8151 MiB VRAM, davon ~2 GB Desktop.\n"
         f"PARAMETER num_ctx {CTX}\n"
-        f"PARAMETER temperature 0.3\n", encoding="utf-8")
+        f"PARAMETER temperature 0.3\n\n"
+        f"{system_block()}", encoding="utf-8")
     for cmd in (["ollama", "rm", NAME], ["ollama", "create", NAME, "-f", str(modelfile)]):
         lauf(cmd, timeout=1800)
     liste = subprocess.run(["ollama", "list"], capture_output=True, text=True).stdout
