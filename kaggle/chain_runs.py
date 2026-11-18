@@ -31,6 +31,15 @@ def st(ref: str) -> str:
     return str(getattr(api.kernels_status(ref), "status")).split(".")[-1]
 
 
+def weiter(smoke_status: str) -> bool:
+    """Den echten Lauf nur starten, wenn der Smoke sauber durch ist.
+
+    ERROR/TIMEOUT heisst: die Pipeline ist nicht bewiesen. Dann 3 Epochen auf einer
+    Gratis-GPU zu verbrennen, waere teuer und wuerde nichts zeigen.
+    """
+    return smoke_status == "COMPLETE"
+
+
 def warte(ref: str, max_min: int = 90) -> str:
     letzte = None
     for _ in range(max_min * 2):
@@ -62,7 +71,7 @@ def hole(ref: str) -> None:
 print("=== 1. Smoke bis Ende ===", flush=True)
 s = warte(SMOKE)
 hole(SMOKE)
-if s != "COMPLETE":
+if not weiter(s):
     print(f"ABBRUCH: Smoke endete mit {s} — kein Full-Lauf gestartet", flush=True)
     sys.exit(1)
 
