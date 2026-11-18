@@ -28,10 +28,40 @@ das 7B Standard — die Uebernahme ist an die Messung gebunden, nicht an die Abs
 
 | Kanal | Zustand |
 |---|---|
-| HuggingFace | `openamer-max/openamer-max-vl-8b` (GGUF 4,7 GB + Model Card) |
-| Lokal (Ollama) | `ollama run hf.co/openamer-max/openamer-max-vl-8b:Q4_K_M` |
-| GitHub | dieses Repository (Quellcode, Kernel, Werkzeuge) — 4,7 GB liegen nicht in Git |
-| Website | Verweis auf HF und den `ollama`-Befehl |
+| HuggingFace | **online**: `openamer-max/openamer-max-vl-8b`, GGUF **5.027.784.992 B** (per API und Range-Request geprueft, Kopf `GGUF`) |
+| Lokal (Ollama) | **registriert** als `openamer-max-vl-8b`, antwortet ueber die API korrekt |
+| GitHub | dieses Repository (Kernel, Werkzeuge, Installer) — 4,7 GB liegen nicht in Git |
+| Website | **live**: Karte in der Modellfamilie mit HF-Link und Befehl |
+
+### Lokal installieren
+
+```bash
+bash scripts/install-vl8b-local.sh     # laedt per curl, registriert in Ollama
+```
+
+Zwei Wege, die hier **nicht** funktionieren, mit Grund:
+
+| Weg | Befund |
+|---|---|
+| `ollama run hf.co/openamer-max/openamer-max-vl-8b:Q4_K_M` | Ollamas Resolver findet `us.aws.cdn.hf.co` nicht (`no such host`), obwohl Windows den Namen aufloest und die Datei per curl erreichbar ist. Zweimal reproduziert. |
+| `ollama run openamer-max-vl-8b` | CLI versucht zu pullen statt lokal zu starten: der Modellspeicher wurde auf `manifests-v2/ollama.com/library/…` umgestellt, `ollama list`, `ollama show` und die API sehen das Modell, die CLI sucht im alten Pfad. |
+
+**Was funktioniert:** die HTTP-API (`/api/chat`) — genau der Weg, den die App und der Agent nutzen. Geprueft: „Wer hat OpenAmer entwickelt?" -> „OpenAmer wurde von Amer Sacirovic aus der Schweiz entwickelt."
+
+### Nebenbefund: Windows-Modellspeicher
+
+Im Windows-Speicher liegen nur noch die drei 8B-Eintraege; das 7B und 16 weitere
+Modelle sind dort **nicht mehr sichtbar** (23 Blobs, 8,6 GB). Der WSL-Speicher ist
+unberuehrt (11 Modelle), der Agent laeuft: `start.sh --audit` meldet
+`Modell: openamer-max-7b registriert` und **0 Probleme**. Wiederherstellung des
+Windows-Speichers ist offen (Neuziehen aus HF oder Kopie aus dem WSL-Speicher).
+
+### Automatik-Schutz
+
+`start.sh` waehlt nur noch `openamer-max-vl-8b-64k` vor dem 7B. Der Name ist Absicht:
+der Agent verlangt 64k geladenen Kontext, und dieser Bau kann das auf 8 GB VRAM nicht
+leisten. Ein 16k-Bau darf deshalb nie automatisch Standard werden — sonst startet der
+Agent nicht mehr.
 
 ## Zwei harte Grenzen
 

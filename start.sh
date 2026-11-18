@@ -18,9 +18,11 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN="$HERE/agent/venv/bin/openamer"
 export OPENAMER_HOME="${OPENAMER_HOME:-$HOME/.openamer}"
 # Modellwahl: ausdrueckliche Vorgabe > registriertes Modell (Reihenfolge unten) >
-# Standard. Damit uebernimmt das OS ein neu trainiertes Modell automatisch, sobald
-# es in Ollama registriert ist — ohne Aenderung am Shortcut.
-MOD_KANDIDATEN="openamer-max-vl-8b openamer-max-7b"
+# Standard. Der Name 'vl-8b-64k' ist Absicht: der Agent verlangt einen geladenen
+# Kontext von 64k, und ein 8B in Q4 braucht dafuer ~15 GB VRAM. Ein 8B mit nur
+# 16k Kontext darf deshalb NICHT automatisch Standard werden (sonst startet der
+# Agent nicht) — er traegt darum den blossen Namen openamer-max-vl-8b.
+MOD_KANDIDATEN="openamer-max-vl-8b-64k openamer-max-7b"
 modell_aus_ollama() {
   local tags k
   tags="$(curl -s --max-time 3 http://127.0.0.1:11434/api/tags 2>/dev/null)" || return 1
