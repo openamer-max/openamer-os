@@ -46,6 +46,11 @@ def render(mode: str, epochs: int, steps: int, seq: int) -> tuple[str, dict]:
          f'EPOCHS = float(os.environ.get("OM_EPOCHS", "{ep}"))', f'"{ep}"'),
         (r'SEQ = int\(os\.environ\.get\("OM_SEQ", "\d+"\)\)',
          f'SEQ = int(os.environ.get("OM_SEQ", "{seq}"))', f'"{seq}"'),
+        # Smoke: Bilder zuerst, damit der Vision-Pfad sicher laeuft
+        (r'VISION_FIRST = os\.environ\.get\("OM_VISION_FIRST", "0"\) == "1"',
+         'VISION_FIRST = os.environ.get("OM_VISION_FIRST", '
+         f'"{"1" if mode == "smoke" else "0"}") == "1"',
+         f'OM_VISION_FIRST", "{"1" if mode == "smoke" else "0"}"'),
     )
     for pattern, repl, marker in subs:
         code, n = re.subn(pattern, repl, code)

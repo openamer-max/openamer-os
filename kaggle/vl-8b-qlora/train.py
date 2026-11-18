@@ -32,6 +32,10 @@ MODEL_ID = os.environ.get("OM_BASE", "Qwen/Qwen3-VL-8B-Instruct")
 MAX_STEPS = int(os.environ.get("OM_STEPS", "25"))
 EPOCHS = float(os.environ.get("OM_EPOCHS", "0"))
 SEQ = int(os.environ.get("OM_SEQ", "1024"))
+# Smoke-Laeufe sollen den Bild-Pfad GARANTIERT treffen, nicht zufaellig: mit
+# 40 Bild-Zeilen in 682 Beispielen und 25 Schritten kann ein Lauf sonst ohne
+# ein einziges Bild durchlaufen und den Vision-Fehler erst spaeter zeigen.
+VISION_FIRST = os.environ.get("OM_VISION_FIRST", "0") == "1"
 DRY = os.environ.get("DRY_RUN") == "1"
 
 
@@ -169,7 +173,18 @@ def build_example(proc, row: dict, base: Path, max_len: int) -> dict | None:
     labels = enc["input_ids"].clone()
     cut = pre["input_ids"].shape[1]
     labels[:, :cut] = -100
-    out = {k: v[0] for k, v in enc.items() if hasattr(v, "shape")}
+    # Batch-Dimension nur bei den 1-D-Feldern entfernen. image_grid_thw ist (1,3)
+    # und MUSS diese Form behalten: der Vision-Teil rechnet
+    # grid_thw[:, 0] * grid_thw[:, 1] * grid_thw[:, 2]. Mit v[0] wurde daraus (3,)
+    # und der Lauf starb an "too many indices for tensor of dimension 1"
+    # (gemessen: Smoke-Lauf 18.11.2026, Schritt 24 von 25 — die ersten 23 Schritte
+    # waren Text, das erste Bild killte den Lauf).
+    keep_2d = {"image_grid_thw"}
+    out = {}
+    for k, v in enc.items():
+        if not hasattr(v, "shape"):
+            continue
+        out[k] = v if k in keep_2d else v[0]
     out["labels"] = labels[0]
     return out
 
@@ -189,6 +204,9 @@ def build_dataset(proc, rows: list[dict], base: Path, max_len: int) -> tuple[lis
             continue
         built.append(ex)
         stats["vision" if r.get("image") else "text"] += 1
+    if VISION_FIRST:
+        built.sort(key=lambda ex: 0 if ex.get("pixel_values") is not None else 1)
+        log("Reihenfolge: Bild-Beispiele zuerst (OM_VISION_FIRST=1)")
     log(f"Beispiele: {len(built)} · {stats}")
     return built, stats
 
@@ -304,6 +322,15 @@ def dry_run() -> None:
         log(f"Beispiel: input_ids {tuple(ex['input_ids'].shape)} · "
             f"labels != -100: {(ex['labels'] != -100).sum().item()} · "
             f"pixel_values {None if ex.get('pixel_values') is None else tuple(ex['pixel_values'].shape)}")
+    # Bildformen pruefen: image_grid_thw muss 2-dimensional bleiben (n, 3),
+    # sonst stirbt der Vision-Teil mit "too many indices for tensor of dimension 1".
+    bilder = [ex for ex in data if ex.get("pixel_values") is not None]
+    for ex in bilder[:2]:
+        g = ex["image_grid_thw"]
+        log(f"Bild-Beispiel: grid_thw {tuple(g.shape)} (ndim={g.ndim}) · "
+            f"pixel_values {tuple(ex['pixel_values'].shape)}")
+    if bilder and any(ex["image_grid_thw"].ndim != 2 for ex in bilder):
+        raise RuntimeError("image_grid_thw ist nicht (n,3) — Collator/Beispielbau pruefen")
     log(f"DRY_RUN ok · {len(data)} Beispiele · {stats}")
 
 
