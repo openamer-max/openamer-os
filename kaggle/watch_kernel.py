@@ -25,11 +25,16 @@ print(f"[{time.strftime('%H:%M:%S')}] beobachte {REF}", flush=True)
 last = None
 for i in range(180):                      # max. 3 Stunden
     try:
-        s = json.loads(api.kernels_status(REF))
-        st = s.get("status")
+        # kaggle 2.x liefert ein Objekt, keine JSON-Zeichenkette (am 18.11. gelernt:
+        # json.loads(...) warf "the JSON object must be str, bytes or bytearray")
+        s = api.kernels_status(REF)
+        # kaggle 2.x liefert ein Enum (KernelWorkerStatus.RUNNING) bzw. ein Objekt —
+        # nicht JSON, und nicht immer ein String. Auf den blossen Namen reduzieren.
+        raw = getattr(s, "status", None)
+        st = str(raw).split(".")[-1] if raw is not None else None
+        msg = getattr(s, "failureMessage", None) or ""
         if st != last:
-            print(f"[{time.strftime('%H:%M:%S')}] Status: {st} "
-                  f"{s.get('failureMessage') or ''}", flush=True)
+            print(f"[{time.strftime('%H:%M:%S')}] Status: {st} {msg}", flush=True)
             last = st
         if st in TERMINAL:
             break
