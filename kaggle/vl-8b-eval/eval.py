@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -75,6 +76,35 @@ def passe(antwort: str, muss: list) -> tuple[bool, str | None]:
     return False, None
 
 
+def systemprompt(base: Path) -> str:
+    """Systemprompt aus dem 7B-Modelfile — Quelle statt Kopie.
+
+    Ohne diesen Prompt ist der Vergleich unfair: das 7B wird im Betrieb mit
+    "Du bist OpenAmer ..." gestartet, eine Messung ohne Prompt antwortet anders
+    (am 19.11.2026 als Verdacht aufgefallen, nachdem 14/24 gegen 22/24 stand).
+    """
+    p = base / "Modelfile.max-7b"
+    if not p.is_file():
+        log("kein Modelfile.max-7b — Messung ohne Systemprompt")
+        return ""
+    t = p.read_text(encoding="utf-8", errors="replace")
+    m = re.search(r'SYSTEM\s+"""(.*?)"""', t, re.S)
+    return m.group(1).strip() if m else ""
+
+
+def bildpfad(base: Path, wert: str) -> Path | None:
+    """Bildpfade im Pruefsatz sind relativ zum REPO-HAUPTORDNER, nicht zum Modell.
+
+    Vorher wurde nur base/<pfad> geprueft -> 0/0 Bildfaelle "gemessen"
+    (Fund 19.11.2026).
+    """
+    for kand in (base, base.parent, base.parent.parent):
+        p = kand / wert
+        if p.is_file():
+            return p
+    return None
+
+
 def main() -> int:
     t0 = time.time()
     deps()
@@ -99,11 +129,15 @@ def main() -> int:
     model = model.merge_and_unload() if hasattr(model, "merge_and_unload") and adapter else model
     model.eval()
     proc = AutoProcessor.from_pretrained(MODEL_ID, trust_remote_code=True)
+    sys_prompt = systemprompt(base)
+    log(f"Systemprompt: {len(sys_prompt)} Zeichen" if sys_prompt else "Systemprompt: keiner")
 
     @torch.no_grad()
     def frage(frage_text: str, bild: Path | None, max_neu: int = 96) -> str:
         inhalt = ([{"type": "image"}] if bild else []) + [{"type": "text", "text": frage_text}]
-        prompt = proc.apply_chat_template([{"role": "user", "content": inhalt}],
+        msgs = ([{"role": "system", "content": sys_prompt}] if sys_prompt else []) \
+            + [{"role": "user", "content": inhalt}]
+        prompt = proc.apply_chat_template(msgs,
                                           tokenize=False, add_generation_prompt=True)
         imgs = [Image.open(bild).convert("RGB")] if bild else None
         enc = proc(text=[prompt], images=imgs, return_tensors="pt").to(0)
@@ -124,8 +158,9 @@ def main() -> int:
         cases = json.loads(p.read_text(encoding="utf-8"))["cases"]
         treffer, details = 0, []
         for c in cases:
-            zeig = base / c[bild_spalte] if bild_spalte and c.get(bild_spalte) else None
-            if bild_spalte and (zeig is None or not zeig.is_file()):
+            zeig = bildpfad(base, c[bild_spalte]) if bild_spalte and c.get(bild_spalte) else None
+            if bild_spalte and zeig is None:
+                log(f"  {name} {c.get('id')}: Bild fehlt ({c.get(bild_spalte)})")
                 continue
             try:
                 antwort = frage(c["frage"], zeig)

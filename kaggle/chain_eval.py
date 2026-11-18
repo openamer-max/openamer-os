@@ -114,7 +114,7 @@ def main() -> int:
     reports = list(ziel.rglob("report.json"))
     if reports:
         r = json.loads(reports[0].read_text(encoding="utf-8"))
-        print(f"  Training: {r.get('schritte')} Schritte · Loss {r.get('training_loss')} · "
+        print(f"  Training: {r.get('schritte')} Schritte · Loss {r.get('loss')} · "
               f"VRAM {r.get('vram_spitze_gib')} GiB · {r.get('dauer_min')} min", flush=True)
 
     print("\n=== 2. Auswertung starten ===", flush=True)
