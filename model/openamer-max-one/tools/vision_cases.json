@@ -103,119 +103,60 @@
  {
   "id": "VT010",
   "lines": [
-   "OpenAmer Installationspruefung",
-   "--------------------------------",
-   "Python gefunden:  3.12.4",
-   "git gefunden:     2.39.5",
-   "Ollama:           erreichbar",
-   "Fertig."
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "A          8,9      560",
+   "C          16,4     668",
+   "E          19,2     644",
+   "",
+   "Summe Speicher: 1872 MB"
   ],
-  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
-  "antwort": "3.12.4"
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "A"
  },
  {
   "id": "VT011",
   "lines": [
-   "=== Werkzeuge ===",
-   "git version 2.43.0",
-   "HEAD zeigt auf 9b2e08d",
-   "Alle Werkzeuge gefunden."
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 88, in lade",
+   "    return json.loads(text)",
+   "KeyError: 'model_name'"
   ],
-  "frage": "Welche Git-Version wird im Bild genannt?",
-  "antwort": "2.43.0"
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "KeyError"
  },
  {
   "id": "VT012",
   "lines": [
-   "Letzter Commit:",
-   "  commit 4c1a77e",
-   "  Author: Amer Sacirovic",
-   "  Message: Build korrigiert"
+   "diff --git a/omx_cli/status.py b/omx_cli/status.py",
+   "--- a/omx_cli/status.py",
+   "+++ b/omx_cli/status.py",
+   "@@ -12,7 +12,7 @@",
+   "-    return 1",
+   "+    return 0",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
   ],
-  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
-  "antwort": "4c1a77e"
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "omx_cli/status.py"
  },
  {
   "id": "VT013",
   "lines": [
-   "OpenAmer Status",
-   "Modell:      openamer-max-tab",
-   "Provider:    ollama",
-   "Kontext:     65536"
-  ],
-  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
-  "antwort": "openamer-max-tab"
- },
- {
-  "id": "VT014",
-  "lines": [
-   "Installation abgeschlossen",
-   "Skills installiert: 42",
-   "Werkzeuge:          42",
-   "Status:             bereit"
-  ],
-  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
-  "antwort": "42"
- },
- {
-  "id": "VT015",
-  "lines": [
-   "Verbindung fehlgeschlagen",
-   "Fehlercode: EACCES",
-   "Ziel: api.example.net:443",
-   "Wiederhole mit --retry 3"
-  ],
-  "frage": "Welcher Fehlercode steht im Bild?",
-  "antwort": "EACCES"
- },
- {
-  "id": "VT016",
-  "lines": [
-   "Werkzeugliste",
-   "vorhanden: git, dateien, terminal",
-   "fehlend:   sms, drucken"
-  ],
-  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
-  "antwort": "sms, drucken"
- },
- {
-  "id": "VT017",
-  "lines": [
-   "Einstellungen",
-   "Ordner:  C:\\Users\\amer7\\Dokumente",
-   "Datei:   verify.py",
-   "Groesse: 4,2 KB"
-  ],
-  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
-  "antwort": "verify.py"
- },
- {
-  "id": "VT018",
-  "lines": [
-   "Build-Lauf",
-   "Schritt 1: Quellen gelesen      durchgelaufen",
-   "Schritt 2: Tests                durchgelaufen",
-   "Schritt 3: Paket                durchgelaufen",
-   "Ergebnis: BUILD DURCHGELAUFEN"
-  ],
-  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
-  "antwort": "durchgelaufen"
- },
- {
-  "id": "VT019",
-  "lines": [
    "OpenAmer Installationspruefung",
    "--------------------------------",
-   "Python gefunden:  3.13.1",
+   "Python gefunden:  3.10.14",
    "git gefunden:     2.47.1",
    "Ollama:           erreichbar",
    "Fertig."
   ],
   "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
-  "antwort": "3.13.1"
+  "antwort": "3.10.14"
  },
  {
-  "id": "VT020",
+  "id": "VT014",
   "lines": [
    "=== Werkzeuge ===",
    "git version 2.43.0",
@@ -226,29 +167,172 @@
   "antwort": "2.43.0"
  },
  {
-  "id": "VT021",
+  "id": "VT015",
   "lines": [
    "Letzter Commit:",
-   "  commit 9b2e08d",
+   "  commit e83f5b0",
    "  Author: Amer Sacirovic",
    "  Message: Build korrigiert"
   ],
   "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
-  "antwort": "9b2e08d"
+  "antwort": "e83f5b0"
  },
  {
-  "id": "VT022",
+  "id": "VT016",
   "lines": [
    "OpenAmer Status",
-   "Modell:      openamer-max-tab",
+   "Modell:      qwen2.5vl:7b",
    "Provider:    ollama",
    "Kontext:     65536"
   ],
   "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
-  "antwort": "openamer-max-tab"
+  "antwort": "qwen2.5vl:7b"
+ },
+ {
+  "id": "VT017",
+  "lines": [
+   "Installation abgeschlossen",
+   "Skills installiert: 42",
+   "Werkzeuge:          42",
+   "Status:             bereit"
+  ],
+  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
+  "antwort": "42"
+ },
+ {
+  "id": "VT018",
+  "lines": [
+   "Verbindung fehlgeschlagen",
+   "Fehlercode: 0x80070005",
+   "Ziel: api.example.net:443",
+   "Wiederhole mit --retry 3"
+  ],
+  "frage": "Welcher Fehlercode steht im Bild?",
+  "antwort": "0x80070005"
+ },
+ {
+  "id": "VT019",
+  "lines": [
+   "Werkzeugliste",
+   "vorhanden: rechnen, browser, git",
+   "fehlend:   csv-export, drucken"
+  ],
+  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
+  "antwort": "csv-export, drucken"
+ },
+ {
+  "id": "VT020",
+  "lines": [
+   "Einstellungen",
+   "Ordner:  /home/amer7/projekte",
+   "Datei:   bericht_2026.pdf",
+   "Groesse: 4,2 KB"
+  ],
+  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
+  "antwort": "bericht_2026.pdf"
+ },
+ {
+  "id": "VT021",
+  "lines": [
+   "Build-Lauf",
+   "Schritt 1: Quellen gelesen      abgebrochen",
+   "Schritt 2: Tests                abgebrochen",
+   "Schritt 3: Paket                uebersprungen",
+   "Ergebnis: BUILD ABGEBROCHEN"
+  ],
+  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
+  "antwort": "abgebrochen"
+ },
+ {
+  "id": "VT022",
+  "lines": [
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "C          16,1     528",
+   "A          10,8     572",
+   "D          15,0     456",
+   "",
+   "Summe Speicher: 1556 MB"
+  ],
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "A"
  },
  {
   "id": "VT023",
+  "lines": [
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 42, in lade",
+   "    return json.loads(text)",
+   "TimeoutError: timed out after 30 seconds"
+  ],
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "TimeoutError"
+ },
+ {
+  "id": "VT024",
+  "lines": [
+   "diff --git a/agent/start.sh b/agent/start.sh",
+   "--- a/agent/start.sh",
+   "+++ b/agent/start.sh",
+   "@@ -12,7 +12,7 @@",
+   "-    reasoning_effort=medium",
+   "+    reasoning_effort=false",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
+  ],
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "agent/start.sh"
+ },
+ {
+  "id": "VT025",
+  "lines": [
+   "OpenAmer Installationspruefung",
+   "--------------------------------",
+   "Python gefunden:  3.12.4",
+   "git gefunden:     2.47.1",
+   "Ollama:           erreichbar",
+   "Fertig."
+  ],
+  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
+  "antwort": "3.12.4"
+ },
+ {
+  "id": "VT026",
+  "lines": [
+   "=== Werkzeuge ===",
+   "git version 2.39.5",
+   "HEAD zeigt auf e83f5b0",
+   "Alle Werkzeuge gefunden."
+  ],
+  "frage": "Welche Git-Version wird im Bild genannt?",
+  "antwort": "2.39.5"
+ },
+ {
+  "id": "VT027",
+  "lines": [
+   "Letzter Commit:",
+   "  commit e83f5b0",
+   "  Author: Amer Sacirovic",
+   "  Message: Build korrigiert"
+  ],
+  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
+  "antwort": "e83f5b0"
+ },
+ {
+  "id": "VT028",
+  "lines": [
+   "OpenAmer Status",
+   "Modell:      qwen2.5vl:7b",
+   "Provider:    ollama",
+   "Kontext:     65536"
+  ],
+  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
+  "antwort": "qwen2.5vl:7b"
+ },
+ {
+  "id": "VT029",
   "lines": [
    "Installation abgeschlossen",
    "Skills installiert: 19",
@@ -259,7 +343,7 @@
   "antwort": "19"
  },
  {
-  "id": "VT024",
+  "id": "VT030",
   "lines": [
    "Verbindung fehlgeschlagen",
    "Fehlercode: 111",
@@ -270,129 +354,28 @@
   "antwort": "111"
  },
  {
-  "id": "VT025",
-  "lines": [
-   "Werkzeugliste",
-   "vorhanden: browser, terminal, git",
-   "fehlend:   csv-export, sms"
-  ],
-  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
-  "antwort": "csv-export, sms"
- },
- {
-  "id": "VT026",
-  "lines": [
-   "Einstellungen",
-   "Ordner:  /home/amer7/projekte",
-   "Datei:   daten.csv",
-   "Groesse: 4,2 KB"
-  ],
-  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
-  "antwort": "daten.csv"
- },
- {
-  "id": "VT027",
-  "lines": [
-   "Build-Lauf",
-   "Schritt 1: Quellen gelesen      durchgelaufen",
-   "Schritt 2: Tests                durchgelaufen",
-   "Schritt 3: Paket                durchgelaufen",
-   "Ergebnis: BUILD DURCHGELAUFEN"
-  ],
-  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
-  "antwort": "durchgelaufen"
- },
- {
-  "id": "VT028",
-  "lines": [
-   "OpenAmer Installationspruefung",
-   "--------------------------------",
-   "Python gefunden:  3.9.20",
-   "git gefunden:     2.51.2",
-   "Ollama:           erreichbar",
-   "Fertig."
-  ],
-  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
-  "antwort": "3.9.20"
- },
- {
-  "id": "VT029",
-  "lines": [
-   "=== Werkzeuge ===",
-   "git version 2.47.1",
-   "HEAD zeigt auf e83f5b0",
-   "Alle Werkzeuge gefunden."
-  ],
-  "frage": "Welche Git-Version wird im Bild genannt?",
-  "antwort": "2.47.1"
- },
- {
-  "id": "VT030",
-  "lines": [
-   "Letzter Commit:",
-   "  commit 4c1a77e",
-   "  Author: Amer Sacirovic",
-   "  Message: Build korrigiert"
-  ],
-  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
-  "antwort": "4c1a77e"
- },
- {
   "id": "VT031",
   "lines": [
-   "OpenAmer Status",
-   "Modell:      openamer-max-tab",
-   "Provider:    ollama",
-   "Kontext:     65536"
+   "Werkzeugliste",
+   "vorhanden: git, rechnen, dateien",
+   "fehlend:   kalender, drucken"
   ],
-  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
-  "antwort": "openamer-max-tab"
+  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
+  "antwort": "kalender, drucken"
  },
  {
   "id": "VT032",
   "lines": [
-   "Installation abgeschlossen",
-   "Skills installiert: 42",
-   "Werkzeuge:          42",
-   "Status:             bereit"
-  ],
-  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
-  "antwort": "42"
- },
- {
-  "id": "VT033",
-  "lines": [
-   "Verbindung fehlgeschlagen",
-   "Fehlercode: ENOENT",
-   "Ziel: api.example.net:443",
-   "Wiederhole mit --retry 3"
-  ],
-  "frage": "Welcher Fehlercode steht im Bild?",
-  "antwort": "ENOENT"
- },
- {
-  "id": "VT034",
-  "lines": [
-   "Werkzeugliste",
-   "vorhanden: git, rechnen, browser",
-   "fehlend:   drucken, musik"
-  ],
-  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
-  "antwort": "drucken, musik"
- },
- {
-  "id": "VT035",
-  "lines": [
    "Einstellungen",
-   "Ordner:  D:\\Sicherung",
-   "Datei:   bericht_2026.pdf",
+   "Ordner:  C:\\Users\\amer7\\Dokumente",
+   "Datei:   verify.py",
    "Groesse: 4,2 KB"
   ],
   "frage": "Wie heisst die Datei, die im Bild genannt wird?",
-  "antwort": "bericht_2026.pdf"
+  "antwort": "verify.py"
  },
  {
-  "id": "VT036",
+  "id": "VT033",
   "lines": [
    "Build-Lauf",
    "Schritt 1: Quellen gelesen      durchgelaufen",
@@ -402,41 +385,83 @@
   ],
   "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
   "antwort": "durchgelaufen"
+ },
+ {
+  "id": "VT034",
+  "lines": [
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "D          8,7      408",
+   "A          10,8     432",
+   "C          12,6     656",
+   "",
+   "Summe Speicher: 1496 MB"
+  ],
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "D"
+ },
+ {
+  "id": "VT035",
+  "lines": [
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 88, in lade",
+   "    return json.loads(text)",
+   "TimeoutError: timed out after 30 seconds"
+  ],
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "TimeoutError"
+ },
+ {
+  "id": "VT036",
+  "lines": [
+   "diff --git a/omx_cli/status.py b/omx_cli/status.py",
+   "--- a/omx_cli/status.py",
+   "+++ b/omx_cli/status.py",
+   "@@ -12,7 +12,7 @@",
+   "-    return 1",
+   "+    return 0",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
+  ],
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "omx_cli/status.py"
  },
  {
   "id": "VT037",
   "lines": [
    "OpenAmer Installationspruefung",
    "--------------------------------",
-   "Python gefunden:  3.9.20",
-   "git gefunden:     2.47.1",
+   "Python gefunden:  3.12.4",
+   "git gefunden:     2.51.2",
    "Ollama:           erreichbar",
    "Fertig."
   ],
   "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
-  "antwort": "3.9.20"
+  "antwort": "3.12.4"
  },
  {
   "id": "VT038",
   "lines": [
    "=== Werkzeuge ===",
-   "git version 2.51.2",
-   "HEAD zeigt auf e83f5b0",
+   "git version 2.47.1",
+   "HEAD zeigt auf a7f3c21",
    "Alle Werkzeuge gefunden."
   ],
   "frage": "Welche Git-Version wird im Bild genannt?",
-  "antwort": "2.51.2"
+  "antwort": "2.47.1"
  },
  {
   "id": "VT039",
   "lines": [
    "Letzter Commit:",
-   "  commit e83f5b0",
+   "  commit 17d9ac4",
    "  Author: Amer Sacirovic",
    "  Message: Build korrigiert"
   ],
   "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
-  "antwort": "e83f5b0"
+  "antwort": "17d9ac4"
  },
  {
   "id": "VT040",
@@ -448,5 +473,1314 @@
   ],
   "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
   "antwort": "openamer-max-7b"
+ },
+ {
+  "id": "VT041",
+  "lines": [
+   "Installation abgeschlossen",
+   "Skills installiert: 256",
+   "Werkzeuge:          42",
+   "Status:             bereit"
+  ],
+  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
+  "antwort": "256"
+ },
+ {
+  "id": "VT042",
+  "lines": [
+   "Verbindung fehlgeschlagen",
+   "Fehlercode: 10060",
+   "Ziel: api.example.net:443",
+   "Wiederhole mit --retry 3"
+  ],
+  "frage": "Welcher Fehlercode steht im Bild?",
+  "antwort": "10060"
+ },
+ {
+  "id": "VT043",
+  "lines": [
+   "Werkzeugliste",
+   "vorhanden: dateien, git, browser",
+   "fehlend:   drucken, sms"
+  ],
+  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
+  "antwort": "drucken, sms"
+ },
+ {
+  "id": "VT044",
+  "lines": [
+   "Einstellungen",
+   "Ordner:  /home/amer7/projekte",
+   "Datei:   bericht_2026.pdf",
+   "Groesse: 4,2 KB"
+  ],
+  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
+  "antwort": "bericht_2026.pdf"
+ },
+ {
+  "id": "VT045",
+  "lines": [
+   "Build-Lauf",
+   "Schritt 1: Quellen gelesen      abgebrochen",
+   "Schritt 2: Tests                abgebrochen",
+   "Schritt 3: Paket                uebersprungen",
+   "Ergebnis: BUILD ABGEBROCHEN"
+  ],
+  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
+  "antwort": "abgebrochen"
+ },
+ {
+  "id": "VT046",
+  "lines": [
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "D          17,4     516",
+   "C          8,6      592",
+   "E          16,2     392",
+   "",
+   "Summe Speicher: 1500 MB"
+  ],
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "C"
+ },
+ {
+  "id": "VT047",
+  "lines": [
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 101, in lade",
+   "    return json.loads(text)",
+   "FileNotFoundError: [Errno 2] No such file or directory"
+  ],
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "FileNotFoundError"
+ },
+ {
+  "id": "VT048",
+  "lines": [
+   "diff --git a/tools/vision.py b/tools/vision.py",
+   "--- a/tools/vision.py",
+   "+++ b/tools/vision.py",
+   "@@ -12,7 +12,7 @@",
+   "-    RND.seed()",
+   "+    RND.seed(20261118)",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
+  ],
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "tools/vision.py"
+ },
+ {
+  "id": "VT049",
+  "lines": [
+   "OpenAmer Installationspruefung",
+   "--------------------------------",
+   "Python gefunden:  3.10.14",
+   "git gefunden:     2.39.5",
+   "Ollama:           erreichbar",
+   "Fertig."
+  ],
+  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
+  "antwort": "3.10.14"
+ },
+ {
+  "id": "VT050",
+  "lines": [
+   "=== Werkzeuge ===",
+   "git version 2.47.1",
+   "HEAD zeigt auf 9b2e08d",
+   "Alle Werkzeuge gefunden."
+  ],
+  "frage": "Welche Git-Version wird im Bild genannt?",
+  "antwort": "2.47.1"
+ },
+ {
+  "id": "VT051",
+  "lines": [
+   "Letzter Commit:",
+   "  commit 9b2e08d",
+   "  Author: Amer Sacirovic",
+   "  Message: Build korrigiert"
+  ],
+  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
+  "antwort": "9b2e08d"
+ },
+ {
+  "id": "VT052",
+  "lines": [
+   "OpenAmer Status",
+   "Modell:      qwen2.5vl:7b",
+   "Provider:    ollama",
+   "Kontext:     65536"
+  ],
+  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
+  "antwort": "qwen2.5vl:7b"
+ },
+ {
+  "id": "VT053",
+  "lines": [
+   "Installation abgeschlossen",
+   "Skills installiert: 256",
+   "Werkzeuge:          42",
+   "Status:             bereit"
+  ],
+  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
+  "antwort": "256"
+ },
+ {
+  "id": "VT054",
+  "lines": [
+   "Verbindung fehlgeschlagen",
+   "Fehlercode: 404",
+   "Ziel: api.example.net:443",
+   "Wiederhole mit --retry 3"
+  ],
+  "frage": "Welcher Fehlercode steht im Bild?",
+  "antwort": "404"
+ },
+ {
+  "id": "VT055",
+  "lines": [
+   "Werkzeugliste",
+   "vorhanden: rechnen, git, terminal",
+   "fehlend:   sms, csv-export"
+  ],
+  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
+  "antwort": "sms, csv-export"
+ },
+ {
+  "id": "VT056",
+  "lines": [
+   "Einstellungen",
+   "Ordner:  /home/amer7/projekte",
+   "Datei:   bericht_2026.pdf",
+   "Groesse: 4,2 KB"
+  ],
+  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
+  "antwort": "bericht_2026.pdf"
+ },
+ {
+  "id": "VT057",
+  "lines": [
+   "Build-Lauf",
+   "Schritt 1: Quellen gelesen      durchgelaufen",
+   "Schritt 2: Tests                durchgelaufen",
+   "Schritt 3: Paket                durchgelaufen",
+   "Ergebnis: BUILD DURCHGELAUFEN"
+  ],
+  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
+  "antwort": "durchgelaufen"
+ },
+ {
+  "id": "VT058",
+  "lines": [
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "B          9,6      476",
+   "D          11,3     536",
+   "E          16,5     548",
+   "",
+   "Summe Speicher: 1560 MB"
+  ],
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "B"
+ },
+ {
+  "id": "VT059",
+  "lines": [
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 17, in lade",
+   "    return json.loads(text)",
+   "ValueError: Expecting value: line 1 column 1 (char 0)"
+  ],
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "ValueError"
+ },
+ {
+  "id": "VT060",
+  "lines": [
+   "diff --git a/tools/vision.py b/tools/vision.py",
+   "--- a/tools/vision.py",
+   "+++ b/tools/vision.py",
+   "@@ -12,7 +12,7 @@",
+   "-    RND.seed()",
+   "+    RND.seed(20261118)",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
+  ],
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "tools/vision.py"
+ },
+ {
+  "id": "VT061",
+  "lines": [
+   "OpenAmer Installationspruefung",
+   "--------------------------------",
+   "Python gefunden:  3.10.14",
+   "git gefunden:     2.47.1",
+   "Ollama:           erreichbar",
+   "Fertig."
+  ],
+  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
+  "antwort": "3.10.14"
+ },
+ {
+  "id": "VT062",
+  "lines": [
+   "=== Werkzeuge ===",
+   "git version 2.51.2",
+   "HEAD zeigt auf 9b2e08d",
+   "Alle Werkzeuge gefunden."
+  ],
+  "frage": "Welche Git-Version wird im Bild genannt?",
+  "antwort": "2.51.2"
+ },
+ {
+  "id": "VT063",
+  "lines": [
+   "Letzter Commit:",
+   "  commit 17d9ac4",
+   "  Author: Amer Sacirovic",
+   "  Message: Build korrigiert"
+  ],
+  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
+  "antwort": "17d9ac4"
+ },
+ {
+  "id": "VT064",
+  "lines": [
+   "OpenAmer Status",
+   "Modell:      qwen2.5vl:7b",
+   "Provider:    ollama",
+   "Kontext:     65536"
+  ],
+  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
+  "antwort": "qwen2.5vl:7b"
+ },
+ {
+  "id": "VT065",
+  "lines": [
+   "Installation abgeschlossen",
+   "Skills installiert: 19",
+   "Werkzeuge:          42",
+   "Status:             bereit"
+  ],
+  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
+  "antwort": "19"
+ },
+ {
+  "id": "VT066",
+  "lines": [
+   "Verbindung fehlgeschlagen",
+   "Fehlercode: 111",
+   "Ziel: api.example.net:443",
+   "Wiederhole mit --retry 3"
+  ],
+  "frage": "Welcher Fehlercode steht im Bild?",
+  "antwort": "111"
+ },
+ {
+  "id": "VT067",
+  "lines": [
+   "Werkzeugliste",
+   "vorhanden: rechnen, git, dateien",
+   "fehlend:   kalender, csv-export"
+  ],
+  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
+  "antwort": "kalender, csv-export"
+ },
+ {
+  "id": "VT068",
+  "lines": [
+   "Einstellungen",
+   "Ordner:  C:\\Users\\amer7\\Dokumente",
+   "Datei:   verify.py",
+   "Groesse: 4,2 KB"
+  ],
+  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
+  "antwort": "verify.py"
+ },
+ {
+  "id": "VT069",
+  "lines": [
+   "Build-Lauf",
+   "Schritt 1: Quellen gelesen      abgebrochen",
+   "Schritt 2: Tests                abgebrochen",
+   "Schritt 3: Paket                uebersprungen",
+   "Ergebnis: BUILD ABGEBROCHEN"
+  ],
+  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
+  "antwort": "abgebrochen"
+ },
+ {
+  "id": "VT070",
+  "lines": [
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "D          13,0     460",
+   "E          10,1     576",
+   "B          18,2     540",
+   "",
+   "Summe Speicher: 1576 MB"
+  ],
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "E"
+ },
+ {
+  "id": "VT071",
+  "lines": [
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 17, in lade",
+   "    return json.loads(text)",
+   "FileNotFoundError: [Errno 2] No such file or directory"
+  ],
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "FileNotFoundError"
+ },
+ {
+  "id": "VT072",
+  "lines": [
+   "diff --git a/agent/start.sh b/agent/start.sh",
+   "--- a/agent/start.sh",
+   "+++ b/agent/start.sh",
+   "@@ -12,7 +12,7 @@",
+   "-    reasoning_effort=medium",
+   "+    reasoning_effort=false",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
+  ],
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "agent/start.sh"
+ },
+ {
+  "id": "VT073",
+  "lines": [
+   "OpenAmer Installationspruefung",
+   "--------------------------------",
+   "Python gefunden:  3.12.7",
+   "git gefunden:     2.47.1",
+   "Ollama:           erreichbar",
+   "Fertig."
+  ],
+  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
+  "antwort": "3.12.7"
+ },
+ {
+  "id": "VT074",
+  "lines": [
+   "=== Werkzeuge ===",
+   "git version 2.51.2",
+   "HEAD zeigt auf a7f3c21",
+   "Alle Werkzeuge gefunden."
+  ],
+  "frage": "Welche Git-Version wird im Bild genannt?",
+  "antwort": "2.51.2"
+ },
+ {
+  "id": "VT075",
+  "lines": [
+   "Letzter Commit:",
+   "  commit e83f5b0",
+   "  Author: Amer Sacirovic",
+   "  Message: Build korrigiert"
+  ],
+  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
+  "antwort": "e83f5b0"
+ },
+ {
+  "id": "VT076",
+  "lines": [
+   "OpenAmer Status",
+   "Modell:      qwen2.5vl:7b",
+   "Provider:    ollama",
+   "Kontext:     65536"
+  ],
+  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
+  "antwort": "qwen2.5vl:7b"
+ },
+ {
+  "id": "VT077",
+  "lines": [
+   "Installation abgeschlossen",
+   "Skills installiert: 42",
+   "Werkzeuge:          42",
+   "Status:             bereit"
+  ],
+  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
+  "antwort": "42"
+ },
+ {
+  "id": "VT078",
+  "lines": [
+   "Verbindung fehlgeschlagen",
+   "Fehlercode: 0x80070005",
+   "Ziel: api.example.net:443",
+   "Wiederhole mit --retry 3"
+  ],
+  "frage": "Welcher Fehlercode steht im Bild?",
+  "antwort": "0x80070005"
+ },
+ {
+  "id": "VT079",
+  "lines": [
+   "Werkzeugliste",
+   "vorhanden: git, terminal, rechnen",
+   "fehlend:   sms, musik"
+  ],
+  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
+  "antwort": "sms, musik"
+ },
+ {
+  "id": "VT080",
+  "lines": [
+   "Einstellungen",
+   "Ordner:  C:\\Users\\amer7\\Dokumente",
+   "Datei:   bericht_2026.pdf",
+   "Groesse: 4,2 KB"
+  ],
+  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
+  "antwort": "bericht_2026.pdf"
+ },
+ {
+  "id": "VT081",
+  "lines": [
+   "Build-Lauf",
+   "Schritt 1: Quellen gelesen      abgebrochen",
+   "Schritt 2: Tests                abgebrochen",
+   "Schritt 3: Paket                uebersprungen",
+   "Ergebnis: BUILD ABGEBROCHEN"
+  ],
+  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
+  "antwort": "abgebrochen"
+ },
+ {
+  "id": "VT082",
+  "lines": [
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "D          7,0      388",
+   "E          15,6     464",
+   "A          6,7      652",
+   "",
+   "Summe Speicher: 1504 MB"
+  ],
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "A"
+ },
+ {
+  "id": "VT083",
+  "lines": [
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 17, in lade",
+   "    return json.loads(text)",
+   "FileNotFoundError: [Errno 2] No such file or directory"
+  ],
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "FileNotFoundError"
+ },
+ {
+  "id": "VT084",
+  "lines": [
+   "diff --git a/omx_cli/build.py b/omx_cli/build.py",
+   "--- a/omx_cli/build.py",
+   "+++ b/omx_cli/build.py",
+   "@@ -12,7 +12,7 @@",
+   "-    mtime = time.time()",
+   "+    mtime = 0",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
+  ],
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "omx_cli/build.py"
+ },
+ {
+  "id": "VT085",
+  "lines": [
+   "OpenAmer Installationspruefung",
+   "--------------------------------",
+   "Python gefunden:  3.10.14",
+   "git gefunden:     2.51.2",
+   "Ollama:           erreichbar",
+   "Fertig."
+  ],
+  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
+  "antwort": "3.10.14"
+ },
+ {
+  "id": "VT086",
+  "lines": [
+   "=== Werkzeuge ===",
+   "git version 2.43.0",
+   "HEAD zeigt auf a7f3c21",
+   "Alle Werkzeuge gefunden."
+  ],
+  "frage": "Welche Git-Version wird im Bild genannt?",
+  "antwort": "2.43.0"
+ },
+ {
+  "id": "VT087",
+  "lines": [
+   "Letzter Commit:",
+   "  commit 9b2e08d",
+   "  Author: Amer Sacirovic",
+   "  Message: Build korrigiert"
+  ],
+  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
+  "antwort": "9b2e08d"
+ },
+ {
+  "id": "VT088",
+  "lines": [
+   "OpenAmer Status",
+   "Modell:      llama3.2:3b",
+   "Provider:    ollama",
+   "Kontext:     65536"
+  ],
+  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
+  "antwort": "llama3.2:3b"
+ },
+ {
+  "id": "VT089",
+  "lines": [
+   "Installation abgeschlossen",
+   "Skills installiert: 7",
+   "Werkzeuge:          42",
+   "Status:             bereit"
+  ],
+  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
+  "antwort": "7"
+ },
+ {
+  "id": "VT090",
+  "lines": [
+   "Verbindung fehlgeschlagen",
+   "Fehlercode: 10060",
+   "Ziel: api.example.net:443",
+   "Wiederhole mit --retry 3"
+  ],
+  "frage": "Welcher Fehlercode steht im Bild?",
+  "antwort": "10060"
+ },
+ {
+  "id": "VT091",
+  "lines": [
+   "Werkzeugliste",
+   "vorhanden: dateien, rechnen, terminal",
+   "fehlend:   sms, csv-export"
+  ],
+  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
+  "antwort": "sms, csv-export"
+ },
+ {
+  "id": "VT092",
+  "lines": [
+   "Einstellungen",
+   "Ordner:  D:\\Sicherung",
+   "Datei:   daten.csv",
+   "Groesse: 4,2 KB"
+  ],
+  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
+  "antwort": "daten.csv"
+ },
+ {
+  "id": "VT093",
+  "lines": [
+   "Build-Lauf",
+   "Schritt 1: Quellen gelesen      abgebrochen",
+   "Schritt 2: Tests                abgebrochen",
+   "Schritt 3: Paket                uebersprungen",
+   "Ergebnis: BUILD ABGEBROCHEN"
+  ],
+  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
+  "antwort": "abgebrochen"
+ },
+ {
+  "id": "VT094",
+  "lines": [
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "E          15,4     416",
+   "C          8,5      672",
+   "B          15,1     552",
+   "",
+   "Summe Speicher: 1640 MB"
+  ],
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "C"
+ },
+ {
+  "id": "VT095",
+  "lines": [
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 23, in lade",
+   "    return json.loads(text)",
+   "ValueError: Expecting value: line 1 column 1 (char 0)"
+  ],
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "ValueError"
+ },
+ {
+  "id": "VT096",
+  "lines": [
+   "diff --git a/omx_cli/build.py b/omx_cli/build.py",
+   "--- a/omx_cli/build.py",
+   "+++ b/omx_cli/build.py",
+   "@@ -12,7 +12,7 @@",
+   "-    mtime = time.time()",
+   "+    mtime = 0",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
+  ],
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "omx_cli/build.py"
+ },
+ {
+  "id": "VT097",
+  "lines": [
+   "OpenAmer Installationspruefung",
+   "--------------------------------",
+   "Python gefunden:  3.13.1",
+   "git gefunden:     2.39.5",
+   "Ollama:           erreichbar",
+   "Fertig."
+  ],
+  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
+  "antwort": "3.13.1"
+ },
+ {
+  "id": "VT098",
+  "lines": [
+   "=== Werkzeuge ===",
+   "git version 2.39.5",
+   "HEAD zeigt auf a7f3c21",
+   "Alle Werkzeuge gefunden."
+  ],
+  "frage": "Welche Git-Version wird im Bild genannt?",
+  "antwort": "2.39.5"
+ },
+ {
+  "id": "VT099",
+  "lines": [
+   "Letzter Commit:",
+   "  commit 9b2e08d",
+   "  Author: Amer Sacirovic",
+   "  Message: Build korrigiert"
+  ],
+  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
+  "antwort": "9b2e08d"
+ },
+ {
+  "id": "VT100",
+  "lines": [
+   "OpenAmer Status",
+   "Modell:      openamer-max-tab",
+   "Provider:    ollama",
+   "Kontext:     65536"
+  ],
+  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
+  "antwort": "openamer-max-tab"
+ },
+ {
+  "id": "VT101",
+  "lines": [
+   "Installation abgeschlossen",
+   "Skills installiert: 42",
+   "Werkzeuge:          42",
+   "Status:             bereit"
+  ],
+  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
+  "antwort": "42"
+ },
+ {
+  "id": "VT102",
+  "lines": [
+   "Verbindung fehlgeschlagen",
+   "Fehlercode: 10060",
+   "Ziel: api.example.net:443",
+   "Wiederhole mit --retry 3"
+  ],
+  "frage": "Welcher Fehlercode steht im Bild?",
+  "antwort": "10060"
+ },
+ {
+  "id": "VT103",
+  "lines": [
+   "Werkzeugliste",
+   "vorhanden: git, terminal, rechnen",
+   "fehlend:   csv-export, drucken"
+  ],
+  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
+  "antwort": "csv-export, drucken"
+ },
+ {
+  "id": "VT104",
+  "lines": [
+   "Einstellungen",
+   "Ordner:  /home/amer7/projekte",
+   "Datei:   bericht_2026.pdf",
+   "Groesse: 4,2 KB"
+  ],
+  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
+  "antwort": "bericht_2026.pdf"
+ },
+ {
+  "id": "VT105",
+  "lines": [
+   "Build-Lauf",
+   "Schritt 1: Quellen gelesen      durchgelaufen",
+   "Schritt 2: Tests                durchgelaufen",
+   "Schritt 3: Paket                durchgelaufen",
+   "Ergebnis: BUILD DURCHGELAUFEN"
+  ],
+  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
+  "antwort": "durchgelaufen"
+ },
+ {
+  "id": "VT106",
+  "lines": [
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "D          19,2     604",
+   "B          7,7      488",
+   "E          10,2     460",
+   "",
+   "Summe Speicher: 1552 MB"
+  ],
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "B"
+ },
+ {
+  "id": "VT107",
+  "lines": [
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 23, in lade",
+   "    return json.loads(text)",
+   "ValueError: Expecting value: line 1 column 1 (char 0)"
+  ],
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "ValueError"
+ },
+ {
+  "id": "VT108",
+  "lines": [
+   "diff --git a/omx_cli/status.py b/omx_cli/status.py",
+   "--- a/omx_cli/status.py",
+   "+++ b/omx_cli/status.py",
+   "@@ -12,7 +12,7 @@",
+   "-    return 1",
+   "+    return 0",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
+  ],
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "omx_cli/status.py"
+ },
+ {
+  "id": "VT109",
+  "lines": [
+   "OpenAmer Installationspruefung",
+   "--------------------------------",
+   "Python gefunden:  3.12.7",
+   "git gefunden:     2.39.5",
+   "Ollama:           erreichbar",
+   "Fertig."
+  ],
+  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
+  "antwort": "3.12.7"
+ },
+ {
+  "id": "VT110",
+  "lines": [
+   "=== Werkzeuge ===",
+   "git version 2.51.2",
+   "HEAD zeigt auf a7f3c21",
+   "Alle Werkzeuge gefunden."
+  ],
+  "frage": "Welche Git-Version wird im Bild genannt?",
+  "antwort": "2.51.2"
+ },
+ {
+  "id": "VT111",
+  "lines": [
+   "Letzter Commit:",
+   "  commit e83f5b0",
+   "  Author: Amer Sacirovic",
+   "  Message: Build korrigiert"
+  ],
+  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
+  "antwort": "e83f5b0"
+ },
+ {
+  "id": "VT112",
+  "lines": [
+   "OpenAmer Status",
+   "Modell:      openamer-max-tab",
+   "Provider:    ollama",
+   "Kontext:     65536"
+  ],
+  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
+  "antwort": "openamer-max-tab"
+ },
+ {
+  "id": "VT113",
+  "lines": [
+   "Installation abgeschlossen",
+   "Skills installiert: 19",
+   "Werkzeuge:          42",
+   "Status:             bereit"
+  ],
+  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
+  "antwort": "19"
+ },
+ {
+  "id": "VT114",
+  "lines": [
+   "Verbindung fehlgeschlagen",
+   "Fehlercode: 111",
+   "Ziel: api.example.net:443",
+   "Wiederhole mit --retry 3"
+  ],
+  "frage": "Welcher Fehlercode steht im Bild?",
+  "antwort": "111"
+ },
+ {
+  "id": "VT115",
+  "lines": [
+   "Werkzeugliste",
+   "vorhanden: browser, dateien, rechnen",
+   "fehlend:   sms, kalender"
+  ],
+  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
+  "antwort": "sms, kalender"
+ },
+ {
+  "id": "VT116",
+  "lines": [
+   "Einstellungen",
+   "Ordner:  /home/amer7/projekte",
+   "Datei:   bericht_2026.pdf",
+   "Groesse: 4,2 KB"
+  ],
+  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
+  "antwort": "bericht_2026.pdf"
+ },
+ {
+  "id": "VT117",
+  "lines": [
+   "Build-Lauf",
+   "Schritt 1: Quellen gelesen      durchgelaufen",
+   "Schritt 2: Tests                durchgelaufen",
+   "Schritt 3: Paket                durchgelaufen",
+   "Ergebnis: BUILD DURCHGELAUFEN"
+  ],
+  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
+  "antwort": "durchgelaufen"
+ },
+ {
+  "id": "VT118",
+  "lines": [
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "A          12,7     504",
+   "E          12,8     464",
+   "D          6,2      448",
+   "",
+   "Summe Speicher: 1416 MB"
+  ],
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "D"
+ },
+ {
+  "id": "VT119",
+  "lines": [
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 101, in lade",
+   "    return json.loads(text)",
+   "ValueError: Expecting value: line 1 column 1 (char 0)"
+  ],
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "ValueError"
+ },
+ {
+  "id": "VT120",
+  "lines": [
+   "diff --git a/omx_cli/status.py b/omx_cli/status.py",
+   "--- a/omx_cli/status.py",
+   "+++ b/omx_cli/status.py",
+   "@@ -12,7 +12,7 @@",
+   "-    return 1",
+   "+    return 0",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
+  ],
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "omx_cli/status.py"
+ },
+ {
+  "id": "VT121",
+  "lines": [
+   "OpenAmer Installationspruefung",
+   "--------------------------------",
+   "Python gefunden:  3.14.2",
+   "git gefunden:     2.43.0",
+   "Ollama:           erreichbar",
+   "Fertig."
+  ],
+  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
+  "antwort": "3.14.2"
+ },
+ {
+  "id": "VT122",
+  "lines": [
+   "=== Werkzeuge ===",
+   "git version 2.47.1",
+   "HEAD zeigt auf 9b2e08d",
+   "Alle Werkzeuge gefunden."
+  ],
+  "frage": "Welche Git-Version wird im Bild genannt?",
+  "antwort": "2.47.1"
+ },
+ {
+  "id": "VT123",
+  "lines": [
+   "Letzter Commit:",
+   "  commit e83f5b0",
+   "  Author: Amer Sacirovic",
+   "  Message: Build korrigiert"
+  ],
+  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
+  "antwort": "e83f5b0"
+ },
+ {
+  "id": "VT124",
+  "lines": [
+   "OpenAmer Status",
+   "Modell:      openamer-max-tab",
+   "Provider:    ollama",
+   "Kontext:     65536"
+  ],
+  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
+  "antwort": "openamer-max-tab"
+ },
+ {
+  "id": "VT125",
+  "lines": [
+   "Installation abgeschlossen",
+   "Skills installiert: 19",
+   "Werkzeuge:          42",
+   "Status:             bereit"
+  ],
+  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
+  "antwort": "19"
+ },
+ {
+  "id": "VT126",
+  "lines": [
+   "Verbindung fehlgeschlagen",
+   "Fehlercode: 404",
+   "Ziel: api.example.net:443",
+   "Wiederhole mit --retry 3"
+  ],
+  "frage": "Welcher Fehlercode steht im Bild?",
+  "antwort": "404"
+ },
+ {
+  "id": "VT127",
+  "lines": [
+   "Werkzeugliste",
+   "vorhanden: git, rechnen, browser",
+   "fehlend:   musik, csv-export"
+  ],
+  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
+  "antwort": "musik, csv-export"
+ },
+ {
+  "id": "VT128",
+  "lines": [
+   "Einstellungen",
+   "Ordner:  /home/amer7/projekte",
+   "Datei:   bericht_2026.pdf",
+   "Groesse: 4,2 KB"
+  ],
+  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
+  "antwort": "bericht_2026.pdf"
+ },
+ {
+  "id": "VT129",
+  "lines": [
+   "Build-Lauf",
+   "Schritt 1: Quellen gelesen      durchgelaufen",
+   "Schritt 2: Tests                durchgelaufen",
+   "Schritt 3: Paket                durchgelaufen",
+   "Ergebnis: BUILD DURCHGELAUFEN"
+  ],
+  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
+  "antwort": "durchgelaufen"
+ },
+ {
+  "id": "VT130",
+  "lines": [
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "A          18,8     512",
+   "B          17,4     444",
+   "C          12,8     500",
+   "",
+   "Summe Speicher: 1456 MB"
+  ],
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "C"
+ },
+ {
+  "id": "VT131",
+  "lines": [
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 23, in lade",
+   "    return json.loads(text)",
+   "ValueError: Expecting value: line 1 column 1 (char 0)"
+  ],
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "ValueError"
+ },
+ {
+  "id": "VT132",
+  "lines": [
+   "diff --git a/tools/vision.py b/tools/vision.py",
+   "--- a/tools/vision.py",
+   "+++ b/tools/vision.py",
+   "@@ -12,7 +12,7 @@",
+   "-    RND.seed()",
+   "+    RND.seed(20261118)",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
+  ],
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "tools/vision.py"
+ },
+ {
+  "id": "VT133",
+  "lines": [
+   "OpenAmer Installationspruefung",
+   "--------------------------------",
+   "Python gefunden:  3.12.7",
+   "git gefunden:     2.43.0",
+   "Ollama:           erreichbar",
+   "Fertig."
+  ],
+  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
+  "antwort": "3.12.7"
+ },
+ {
+  "id": "VT134",
+  "lines": [
+   "=== Werkzeuge ===",
+   "git version 2.47.1",
+   "HEAD zeigt auf a7f3c21",
+   "Alle Werkzeuge gefunden."
+  ],
+  "frage": "Welche Git-Version wird im Bild genannt?",
+  "antwort": "2.47.1"
+ },
+ {
+  "id": "VT135",
+  "lines": [
+   "Letzter Commit:",
+   "  commit e83f5b0",
+   "  Author: Amer Sacirovic",
+   "  Message: Build korrigiert"
+  ],
+  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
+  "antwort": "e83f5b0"
+ },
+ {
+  "id": "VT136",
+  "lines": [
+   "OpenAmer Status",
+   "Modell:      openamer-max-tab",
+   "Provider:    ollama",
+   "Kontext:     65536"
+  ],
+  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
+  "antwort": "openamer-max-tab"
+ },
+ {
+  "id": "VT137",
+  "lines": [
+   "Installation abgeschlossen",
+   "Skills installiert: 256",
+   "Werkzeuge:          42",
+   "Status:             bereit"
+  ],
+  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
+  "antwort": "256"
+ },
+ {
+  "id": "VT138",
+  "lines": [
+   "Verbindung fehlgeschlagen",
+   "Fehlercode: 0x80070005",
+   "Ziel: api.example.net:443",
+   "Wiederhole mit --retry 3"
+  ],
+  "frage": "Welcher Fehlercode steht im Bild?",
+  "antwort": "0x80070005"
+ },
+ {
+  "id": "VT139",
+  "lines": [
+   "Werkzeugliste",
+   "vorhanden: rechnen, git, terminal",
+   "fehlend:   musik, csv-export"
+  ],
+  "frage": "Welche Funktionen sind im Bild als fehlend markiert? Nenne beide.",
+  "antwort": "musik, csv-export"
+ },
+ {
+  "id": "VT140",
+  "lines": [
+   "Einstellungen",
+   "Ordner:  /home/amer7/projekte",
+   "Datei:   daten.csv",
+   "Groesse: 4,2 KB"
+  ],
+  "frage": "Wie heisst die Datei, die im Bild genannt wird?",
+  "antwort": "daten.csv"
+ },
+ {
+  "id": "VT141",
+  "lines": [
+   "Build-Lauf",
+   "Schritt 1: Quellen gelesen      durchgelaufen",
+   "Schritt 2: Tests                durchgelaufen",
+   "Schritt 3: Paket                durchgelaufen",
+   "Ergebnis: BUILD DURCHGELAUFEN"
+  ],
+  "frage": "Lief dieser Build durch oder ist er abgebrochen? Antworte mit einem Wort.",
+  "antwort": "durchgelaufen"
+ },
+ {
+  "id": "VT142",
+  "lines": [
+   "Messwerte",
+   "Durchlauf   Zeit s   Speicher MB",
+   "A          7,0      384",
+   "C          11,9     508",
+   "E          6,6      648",
+   "",
+   "Summe Speicher: 1540 MB"
+  ],
+  "frage": "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben.",
+  "antwort": "E"
+ },
+ {
+  "id": "VT143",
+  "lines": [
+   "Traceback (most recent call last):",
+   "  File \"C:\\Users\\amer7\\run.py\", line 64, in main",
+   "    daten = lade(pfad)",
+   "  File \"C:\\Users\\amer7\\lader.py\", line 17, in lade",
+   "    return json.loads(text)",
+   "FileNotFoundError: [Errno 2] No such file or directory"
+  ],
+  "frage": "Welche Ausnahme nennt das Bild in der letzten Zeile?",
+  "antwort": "FileNotFoundError"
+ },
+ {
+  "id": "VT144",
+  "lines": [
+   "diff --git a/tools/vision.py b/tools/vision.py",
+   "--- a/tools/vision.py",
+   "+++ b/tools/vision.py",
+   "@@ -12,7 +12,7 @@",
+   "-    RND.seed()",
+   "+    RND.seed(20261118)",
+   " ",
+   "1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"
+  ],
+  "frage": "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad.",
+  "antwort": "tools/vision.py"
+ },
+ {
+  "id": "VT145",
+  "lines": [
+   "OpenAmer Installationspruefung",
+   "--------------------------------",
+   "Python gefunden:  3.12.4",
+   "git gefunden:     2.39.5",
+   "Ollama:           erreichbar",
+   "Fertig."
+  ],
+  "frage": "Welche Python-Version meldet die Pruefung? Antworte mit der Versionsnummer.",
+  "antwort": "3.12.4"
+ },
+ {
+  "id": "VT146",
+  "lines": [
+   "=== Werkzeuge ===",
+   "git version 2.43.0",
+   "HEAD zeigt auf 9b2e08d",
+   "Alle Werkzeuge gefunden."
+  ],
+  "frage": "Welche Git-Version wird im Bild genannt?",
+  "antwort": "2.43.0"
+ },
+ {
+  "id": "VT147",
+  "lines": [
+   "Letzter Commit:",
+   "  commit 9b2e08d",
+   "  Author: Amer Sacirovic",
+   "  Message: Build korrigiert"
+  ],
+  "frage": "Welcher Commit-Hash steht im Bild? Nenne nur den Hash.",
+  "antwort": "9b2e08d"
+ },
+ {
+  "id": "VT148",
+  "lines": [
+   "OpenAmer Status",
+   "Modell:      openamer-max-7b",
+   "Provider:    ollama",
+   "Kontext:     65536"
+  ],
+  "frage": "Welches Modell ist laut Bild aktiv? Nenne den Modellnamen.",
+  "antwort": "openamer-max-7b"
+ },
+ {
+  "id": "VT149",
+  "lines": [
+   "Installation abgeschlossen",
+   "Skills installiert: 19",
+   "Werkzeuge:          42",
+   "Status:             bereit"
+  ],
+  "frage": "Wie viele Skills meldet die Ausgabe? Nenne die Zahl.",
+  "antwort": "19"
+ },
+ {
+  "id": "VT150",
+  "lines": [
+   "Verbindung fehlgeschlagen",
+   "Fehlercode: EACCES",
+   "Ziel: api.example.net:443",
+   "Wiederhole mit --retry 3"
+  ],
+  "frage": "Welcher Fehlercode steht im Bild?",
+  "antwort": "EACCES"
  }
 ]

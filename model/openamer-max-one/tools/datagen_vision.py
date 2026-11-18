@@ -32,10 +32,26 @@ RENDER_PS1 = HERE / "vision_render.ps1"
 RND = random.Random(20261118)
 
 # Werte, die im Pruefsatz stehen — sie duerfen hier NICHT auftauchen.
-FORBIDDEN = ["3.11.17", "2.54", "cde9d39", "deepseek", "314",
-             "11001", "getaddrinfo", "config.yaml"]
+# EINE Quelle: die Sollwerte des Vision-Pruefsatzes selbst. Vorher stand hier
+# eine eigene Liste ("3.11.17"), waehrend die Schranke in build_dataset.py den
+# kuerzeren Wert ("3.11") pruefte — so rutschte "3.11.9" durch und riss die
+# Schranke (18.11.2026).
+def _pruefwerte() -> list[str]:
+    p = MODELDIR / "testset_vision.json"
+    werte = {"2.54", "cde9d39", "deepseek", "314", "11001", "getaddrinfo",
+             "config.yaml"}
+    if p.is_file():
+        for c in json.loads(p.read_text(encoding="utf-8")).get("cases", []):
+            for v in (c.get("muss") or []):
+                s = str(v).strip().lower()
+                if len(s) >= 3:
+                    werte.add(s)
+    return sorted(werte)
 
-PY_VERS = ["3.12.4", "3.10.14", "3.11.9", "3.13.1", "3.9.20"]
+
+FORBIDDEN = _pruefwerte()
+
+PY_VERS = ["3.12.4", "3.10.14", "3.12.7", "3.13.1", "3.14.2"]
 GIT_VERS = ["2.43.0", "2.47.1", "2.39.5", "2.51.2"]
 HASHES = ["a7f3c21", "9b2e08d", "4c1a77e", "e83f5b0", "17d9ac4"]
 MODELS = ["openamer-max-7b", "qwen2.5vl:7b", "openamer-max-tab", "llama3.2:3b"]
@@ -128,8 +144,54 @@ def _case_success(i: int) -> tuple[list[str], str, str]:
     return lines, q, "durchgelaufen" if durch else "abgebrochen"
 
 
+def _case_tabelle(i: int) -> tuple[list[str], str, str]:
+    """Tabelle lesen und den Extremwert finden — nicht nur eine Zahl abmalen."""
+    rows = [(name, round(RND.uniform(6, 20), 1), RND.randrange(380, 680, 4))
+            for name in RND.sample(["A", "B", "C", "D", "E"], 3)]
+    schnell = min(rows, key=lambda r: r[1])
+    lines = ["Messwerte", "Durchlauf   Zeit s   Speicher MB"]
+    lines += [f"{n:<11}{str(t).replace('.', ','):<9}{s}" for n, t, s in rows]
+    lines += ["", f"Summe Speicher: {sum(s for _, _, s in rows)} MB"]
+    q = "Welcher Durchlauf war am schnellsten? Antworte mit dem Buchstaben."
+    return lines, q, schnell[0]
+
+
+def _case_traceback(i: int) -> tuple[list[str], str, str]:
+    """Ausnahmetyp aus einem echten Stacktrace-Aufbau ablesen."""
+    exc = RND.choice(["ValueError", "KeyError", "FileNotFoundError", "TimeoutError"])
+    zeile = RND.choice([17, 23, 42, 88, 101])
+    detail = {"ValueError": "Expecting value: line 1 column 1 (char 0)",
+              "KeyError": "'model_name'",
+              "FileNotFoundError": "[Errno 2] No such file or directory",
+              "TimeoutError": "timed out after 30 seconds"}[exc]
+    lines = ["Traceback (most recent call last):",
+             '  File "C:\\Users\\amer7\\run.py", line 64, in main',
+             "    daten = lade(pfad)",
+             f'  File "C:\\Users\\amer7\\lader.py", line {zeile}, in lade',
+             "    return json.loads(text)",
+             f"{exc}: {detail}"]
+    q = "Welche Ausnahme nennt das Bild in der letzten Zeile?"
+    return lines, q, exc
+
+
+def _case_diff(i: int) -> tuple[list[str], str, str]:
+    """Geaenderte Datei aus einem Diff-Kopf ablesen."""
+    datei, alt, neu = RND.choice([
+        ("omx_cli/build.py", "mtime = time.time()", "mtime = 0"),
+        ("omx_cli/status.py", "return 1", "return 0"),
+        ("agent/start.sh", "reasoning_effort=medium", "reasoning_effort=false"),
+        ("tools/vision.py", "RND.seed()", "RND.seed(20261118)"),
+    ])
+    lines = [f"diff --git a/{datei} b/{datei}", f"--- a/{datei}", f"+++ b/{datei}",
+             "@@ -12,7 +12,7 @@", f"-    {alt}", f"+    {neu}", " ",
+             f"1 Datei geaendert, 1 Einfuegung(+), 1 Loeschung(-)"]
+    q = "In welcher Datei wurde etwas geaendert? Antworte mit dem Pfad."
+    return lines, q, datei
+
+
 GENERATORS = [_case_version, _case_git, _case_hash, _case_model, _case_count,
-              _case_error, _case_missing, _case_path, _case_success]
+              _case_error, _case_missing, _case_path, _case_success,
+              _case_tabelle, _case_traceback, _case_diff]
 
 
 def build_cases(count: int) -> list[dict]:
